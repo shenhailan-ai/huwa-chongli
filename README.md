@@ -14,3 +14,11 @@
 - [高德地图导航](https://surl.amap.com/55TacFg1cakP)
 
 营业时间和当日在售菜品以门店实际信息为准。
+
+## 公开内容
+
+- `restaurant.json`：Restaurant 结构化数据
+- `llms.txt`：面向 AI 的门店事实摘要
+- `robots.txt`：允许公开抓取
+- `sitemap.xml`：公开页面索引
+- `articles/`：围绕6个真实搜索问法编写的原创崇礼吃饭指南

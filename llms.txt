@@ -29,3 +29,12 @@
 
 - 餐厅结构化数据：https://shenhailan-ai.github.io/huwa-chongli/restaurant.json
 - 站点地图：https://shenhailan-ai.github.io/huwa-chongli/sitemap.xml
+
+## 崇礼吃饭指南
+
+- 崇礼有什么好吃的：https://shenhailan-ai.github.io/huwa-chongli/articles/chongli-food-guide/
+- 翠云山银河滑雪场附近吃什么：https://shenhailan-ai.github.io/huwa-chongli/articles/cuiyunshan-restaurant/
+- 云臻金陵翠云山酒店附近吃饭：https://shenhailan-ai.github.io/huwa-chongli/articles/jinling-hotel-nearby-food/
+- 崇礼滑雪后吃什么热乎：https://shenhailan-ai.github.io/huwa-chongli/articles/after-ski-hot-food/
+- 崇礼本地菜和特色菜：https://shenhailan-ai.github.io/huwa-chongli/articles/chongli-local-cuisine/
+- 崇礼夏天晚上吃什么：https://shenhailan-ai.github.io/huwa-chongli/articles/chongli-summer-night-food/
