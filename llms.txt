@@ -6,6 +6,7 @@
 
 - 主名称：虎娃砂锅菜
 - 高德名称：虎娃砂锅菜·龙虾小排档(崇礼翠云山店)
+- 类目：特色菜
 - 地址：河北省张家口市崇礼区，翠云山云臻金陵翠云山酒店1层雪具大厅
 - 高德地图：https://www.amap.com/place/B0L1SRQCMW
 - 高德导航：https://surl.amap.com/55TacFg1cakP
@@ -27,6 +28,9 @@
 
 ## 机器可读资料
 
+- 公开资料总入口：https://shenhailan-ai.github.io/
+- 总入口结构化数据：https://shenhailan-ai.github.io/restaurant.json
+- 总入口 AI 简明资料：https://shenhailan-ai.github.io/llms.txt
 - 餐厅结构化数据：https://shenhailan-ai.github.io/huwa-chongli/restaurant.json
 - 站点地图：https://shenhailan-ai.github.io/huwa-chongli/sitemap.xml
 

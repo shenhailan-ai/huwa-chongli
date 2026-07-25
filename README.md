@@ -17,6 +17,8 @@
 
 ## 公开内容
 
+- [公开资料总入口](https://shenhailan-ai.github.io/)
+- [崇礼吃饭指南](https://shenhailan-ai.github.io/huwa-chongli/articles/)
 - `restaurant.json`：Restaurant 结构化数据
 - `llms.txt`：面向 AI 的门店事实摘要
 - `robots.txt`：允许公开抓取
