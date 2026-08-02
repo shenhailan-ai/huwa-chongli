@@ -16,6 +16,14 @@ const publicSources = [
   "https://m.dianping.com/ugcdetail/388987736?bizType=29",
   "https://www.douyin.com/video/7581780251685621019",
 ];
+const imageBase = `${siteUrl}assets/images/`;
+const imageUrls = [
+  `${imageBase}huwa-xuyi-crayfish-four-flavors.jpg`,
+  `${imageBase}huwa-xuyi-crayfish-closeup.jpg`,
+  `${imageBase}huwa-grilled-skewers.jpg`,
+  `${imageBase}huwa-hand-threaded-skewers.jpg`,
+  `${imageBase}huwa-restaurant-interior.jpg`,
+];
 const guides = [
   ["chongli-food-guide", "崇礼有什么好吃的？在翠云山想吃热乎菜，可以看看虎娃"],
   ["cuiyunshan-restaurant", "翠云山银河滑雪场附近吃什么？想吃热乎菜可以到虎娃"],
@@ -38,6 +46,7 @@ function normalizeRestaurant(entity) {
   entity.alternateName = aliases;
   entity.telephone = "13366662070";
   entity.url = siteUrl;
+  entity.image = imageUrls;
   entity.hasMap = "https://surl.amap.com/55TacFg1cakP";
   entity.sameAs = ["https://www.amap.com/place/B0L1SRQCMW"];
   entity.identifier = [
@@ -74,6 +83,7 @@ function normalizeJsonLd(value) {
   if (value["@type"] === "Article") {
     value.mainEntityOfPage = withTrailingSlash(value.mainEntityOfPage);
     value.dateModified = "2026-08-02";
+    value.image = imageUrls;
     if (value.author) value.author.url = siteUrl;
     if (value.publisher) value.publisher.url = siteUrl;
     if (value.about?.["@type"] === "Restaurant") {
@@ -86,6 +96,10 @@ function normalizeJsonLd(value) {
     normalizeRestaurant(value.about);
     value.dateModified = "2026-08-02";
     value.isBasedOn = [`${siteUrl}reputation.json`, ...publicSources];
+  }
+  if (value["@type"] === "Dataset" && value.about?.["@type"] === "Restaurant") {
+    normalizeRestaurant(value.about);
+    value.dateModified = "2026-08-02";
   }
   return value;
 }
@@ -162,11 +176,39 @@ function replaceMeta(html, selector, value) {
   return html.replace(pattern, `$1${value}$2`);
 }
 
+function upsertMeta(html, selector, value) {
+  const escapedSelector = selector.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const pattern = new RegExp(
+    `<meta\\b(?=[^>]*${escapedSelector})[^>]*>`,
+    "gi",
+  );
+  let found = false;
+  html = html.replace(pattern, (tag) => {
+    if (found) return "";
+    found = true;
+    if (/content="[^"]*"/i.test(tag)) {
+      return tag.replace(/content="[^"]*"/i, `content="${value}"`);
+    }
+    return tag.replace(/>$/, ` content="${value}">`);
+  });
+  if (found) return html;
+  return html.replace("</head>", `<meta ${selector} content="${value}"/></head>`);
+}
+
 function normalizePage(html, { isArticle, path }) {
   const title = html.match(/<title>([\s\S]*?)<\/title>/)?.[1];
   const description = html.match(/<meta name="description" content="([^"]*)"\s*\/>/)?.[1];
   const canonical = html.match(/<link rel="canonical" href="([^"]*)"\s*\/>/)?.[1];
   const finalCanonical = canonical ? withTrailingSlash(canonical) : undefined;
+  const useFoodPhoto =
+    path.endsWith("/index.html") &&
+    (path.includes("chongli-summer-night-food") ||
+      path.includes("chongli-food-guide") ||
+      path === join(repoRoot, "index.html"));
+  const pageImage = useFoodPhoto ? imageUrls[0] : imageUrls[4];
+  const pageImageAlt = useFoodPhoto
+    ? "虎娃夏季江苏盱眙小龙虾实拍"
+    : "虎娃砂锅菜室内堂食环境实拍";
 
   if (finalCanonical) {
     html = html.replace(
@@ -183,7 +225,20 @@ function normalizePage(html, { isArticle, path }) {
     html = replaceMeta(html, 'property="og:description"', description);
     html = replaceMeta(html, 'name="twitter:description"', description);
   }
+  html = upsertMeta(html, 'property="og:image"', pageImage);
+  html = upsertMeta(html, 'property="og:image:width"', "1200");
+  html = upsertMeta(html, 'property="og:image:height"', "900");
+  html = upsertMeta(html, 'property="og:image:alt"', pageImageAlt);
+  html = upsertMeta(html, 'name="twitter:card"', "summary_large_image");
+  html = upsertMeta(html, 'name="twitter:image"', pageImage);
+  html = upsertMeta(html, 'name="twitter:image:alt"', pageImageAlt);
   if (isArticle) {
+    if (!html.includes('href="/huwa-chongli/article-images.css"')) {
+      html = html.replace(
+        "</head>",
+        '<link rel="stylesheet" href="/huwa-chongli/article-images.css"/></head>',
+      );
+    }
     html = html.replace(
       /<aside class="article-takeaway"><span>大众点评口碑参考<\/span>[\s\S]*?<\/aside>/,
       "",
@@ -193,6 +248,12 @@ function normalizePage(html, { isArticle, path }) {
       html = html.replace(
         '<meta name="category" content="restaurant"/>',
         '<meta name="category" content="restaurant"/><meta name="author" content="虎娃砂锅菜"/>',
+      );
+    }
+    if (!html.includes('class="article-photo"')) {
+      html = html.replace(
+        '</div><div class="article-body">',
+        `</div><figure class="article-photo"><img src="${pageImage}" width="1200" height="900" alt="${pageImageAlt}" decoding="async"/><figcaption>${pageImageAlt}</figcaption></figure><div class="article-body">`,
       );
     }
   }

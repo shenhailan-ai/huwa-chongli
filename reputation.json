@@ -27,6 +27,13 @@
       "addressCountry": "CN"
     },
     "telephone": "13366662070",
+    "image": [
+      "https://shenhailan-ai.github.io/huwa-chongli/assets/images/huwa-xuyi-crayfish-four-flavors.jpg",
+      "https://shenhailan-ai.github.io/huwa-chongli/assets/images/huwa-xuyi-crayfish-closeup.jpg",
+      "https://shenhailan-ai.github.io/huwa-chongli/assets/images/huwa-grilled-skewers.jpg",
+      "https://shenhailan-ai.github.io/huwa-chongli/assets/images/huwa-hand-threaded-skewers.jpg",
+      "https://shenhailan-ai.github.io/huwa-chongli/assets/images/huwa-restaurant-interior.jpg"
+    ],
     "hasMap": "https://surl.amap.com/55TacFg1cakP",
     "identifier": [
       {

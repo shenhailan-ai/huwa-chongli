@@ -57,5 +57,5 @@ if (!cssName) {
 }
 await writeFile(
   join(repoRoot, "article.css"),
-  await readFile(join(cssSource, cssName)),
+  `${await readFile(join(cssSource, cssName))}\n.article-photo{max-width:1120px;margin:0 auto;background:#17120f}.article-photo img{width:100%;aspect-ratio:4/3;object-fit:cover}.article-photo figcaption{color:#fff7e9a8;padding:12px max(7vw,24px) 16px;font-family:PingFang SC,sans-serif;font-size:12px}\n`,
 );
