@@ -5,9 +5,6 @@ const repoRoot = new URL("../", import.meta.url);
 const articlesRoot = new URL("../articles/", import.meta.url);
 const entries = await readdir(articlesRoot, { withFileTypes: true });
 
-const reputationBlock =
-  '<aside class="article-takeaway"><span>大众点评口碑参考</span><p>截至2026年8月1日，门店经营者确认虎娃砂锅菜在大众点评累计2000多条好评。评价数量和评分会持续变化，实时信息以大众点评门店页为准。<a href="/huwa-chongli/reputation/">查看公开口碑与门店实体核对说明</a>。</p></aside>';
-
 for (const entry of entries) {
   if (!entry.isDirectory()) continue;
   const path = join(articlesRoot.pathname, entry.name, "index.html");
@@ -16,12 +13,6 @@ for (const entry of entries) {
     '"dateModified":"2026-07-25"',
     '"dateModified":"2026-08-01"',
   );
-  if (!html.includes("大众点评口碑参考")) {
-    html = html.replace(
-      '<section class="article-location">',
-      `${reputationBlock}<section class="article-location">`,
-    );
-  }
   await writeFile(path, html);
 }
 
