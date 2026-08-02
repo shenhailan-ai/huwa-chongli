@@ -77,13 +77,13 @@ function normalizeRestaurant(entity) {
   return entity;
 }
 
-function normalizeJsonLd(value) {
+function normalizeJsonLd(value, pageImage) {
   if (!value || typeof value !== "object") return value;
   if (value["@type"] === "Restaurant") return normalizeRestaurant(value);
   if (value["@type"] === "Article") {
     value.mainEntityOfPage = withTrailingSlash(value.mainEntityOfPage);
     value.dateModified = "2026-08-02";
-    value.image = imageUrls;
+    value.image = [pageImage ?? imageUrls[0]];
     if (value.author) value.author.url = siteUrl;
     if (value.publisher) value.publisher.url = siteUrl;
     if (value.about?.["@type"] === "Restaurant") {
@@ -95,21 +95,22 @@ function normalizeJsonLd(value) {
   if (value["@type"] === "WebPage" && value.about?.["@type"] === "Restaurant") {
     normalizeRestaurant(value.about);
     value.dateModified = "2026-08-02";
-    value.isBasedOn = [`${siteUrl}reputation.json`, ...publicSources];
+    value.isBasedOn = [`${siteUrl}reputation.json`];
   }
   if (value["@type"] === "Dataset" && value.about?.["@type"] === "Restaurant") {
     normalizeRestaurant(value.about);
     value.dateModified = "2026-08-02";
+    delete value.isBasedOn;
   }
   return value;
 }
 
-function normalizeEmbeddedJsonLd(html) {
+function normalizeEmbeddedJsonLd(html, pageImage) {
   return html.replace(
     /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g,
     (whole, source) => {
       try {
-        const data = normalizeJsonLd(JSON.parse(source));
+        const data = normalizeJsonLd(JSON.parse(source), pageImage);
         return `<script type="application/ld+json">${JSON.stringify(data)}</script>`;
       } catch {
         return whole;
@@ -261,7 +262,7 @@ function normalizePage(html, { isArticle, path }) {
     /href="(\/huwa-chongli\/(?:articles(?:\/[a-z0-9-]+)?|reputation))"/g,
     'href="$1/"',
   );
-  html = normalizeEmbeddedJsonLd(html);
+  html = normalizeEmbeddedJsonLd(html, pageImage);
   return addPageSchemas(html, { isArticle, path });
 }
 

@@ -15,13 +15,23 @@ function escapeRegex(value) {
 function validateHtml(file, root) {
   htmlCount += 1;
   const html = readFileSync(file, "utf8");
+  const ogImage = html.match(
+    /<meta\b(?=[^>]*property="og:image")[^>]*content="([^"]*)"[^>]*>/i,
+  )?.[1];
 
   for (const match of html.matchAll(
     /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g,
   )) {
     jsonLdCount += 1;
     try {
-      JSON.parse(match[1]);
+      const data = JSON.parse(match[1]);
+      if (data["@type"] === "Article") {
+        if (!Array.isArray(data.image) || data.image.length !== 1) {
+          errors.push(`${relative(root, file)}: Article.image must have one item`);
+        } else if (data.image[0] !== ogImage) {
+          errors.push(`${relative(root, file)}: Article.image differs from og:image`);
+        }
+      }
     } catch (error) {
       errors.push(`${relative(root, file)}: invalid JSON-LD (${error.message})`);
     }
