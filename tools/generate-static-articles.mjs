@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 const repoRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const localOrigin = "http://127.0.0.1:3000";
 const officialOrigin = "https://huwa-chongli.aware-maple-3401.chatgpt.site";
-const mirrorOrigin = "https://shenhailan-ai.github.io/huwa-chongli";
+const mirrorOrigin = "https://huwachongli.com/huwa-chongli";
 const paths = [
   "/articles",
   "/articles/chongli-food-guide",

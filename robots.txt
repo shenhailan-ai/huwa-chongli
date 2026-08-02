@@ -7,4 +7,4 @@ Allow: /
 User-agent: Bytespider
 Allow: /
 
-Sitemap: https://shenhailan-ai.github.io/huwa-chongli/sitemap.xml
+Sitemap: https://huwachongli.com/huwa-chongli/sitemap.xml

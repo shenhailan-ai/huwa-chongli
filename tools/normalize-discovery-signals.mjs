@@ -3,7 +3,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const repoRoot = dirname(dirname(fileURLToPath(import.meta.url)));
-const siteUrl = "https://shenhailan-ai.github.io/huwa-chongli/";
+const siteUrl = "https://huwachongli.com/huwa-chongli/";
 const restaurantId = `${siteUrl}#restaurant`;
 const fullName = "虎娃砂锅菜·龙虾小排档(崇礼翠云山店)";
 const aliases = [
