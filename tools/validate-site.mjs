@@ -38,7 +38,7 @@ function validateHtml(file, root) {
   }
 
   for (const match of html.matchAll(
-    /(?:src|href)="(\/huwa-chongli\/(?:assets\/images\/[^"]+|article-images\.css))"/g,
+    /(?:src|href|srcset)="(\/huwa-chongli\/(?:assets\/images\/[^"]+|(?:article-images|site)\.css))"/g,
   )) {
     const local = join(repoRoot, match[1].replace(/^\/huwa-chongli\//, ""));
     if (!existsSync(local)) {

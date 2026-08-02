@@ -43,7 +43,7 @@ for (const pathname of paths) {
 
 const cssSource = join(
   dirname(repoRoot),
-  "huwa-ai-site",
+  "huwa-chatgpt-site",
   "dist",
   "client",
   "assets",
