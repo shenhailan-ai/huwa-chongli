@@ -89,40 +89,12 @@ body.site-home {
 .brand-lockup {
   display: inline-flex;
   align-items: center;
-  gap: 14px;
 }
 
-.brand-seal {
-  display: grid;
-  width: 48px;
-  height: 48px;
-  border: 1px solid var(--brass-soft);
-  place-items: center;
-  color: var(--brass-soft);
-  font-family: "STKaiti", "KaiTi", serif;
-  font-size: 28px;
-  font-weight: 700;
-  transform: rotate(-3deg);
-}
-
-.brand-lockup strong,
-.brand-lockup small {
+.brand-lockup img {
   display: block;
-}
-
-.brand-lockup strong {
-  color: #fff9ef;
-  font-family: "Songti SC", "STSong", "Noto Serif CJK SC", serif;
-  font-size: 18px;
-  letter-spacing: 0.12em;
-}
-
-.brand-lockup small {
-  margin-top: 3px;
-  color: rgba(255, 244, 227, 0.58);
-  font-family: Arial, sans-serif;
-  font-size: 9px;
-  letter-spacing: 0.3em;
+  width: clamp(180px, 19vw, 260px);
+  height: auto;
 }
 
 .desktop-nav {
@@ -851,12 +823,12 @@ body.site-home {
   display: grid;
   max-width: 820px;
   align-items: center;
-  grid-template-columns: 150px minmax(0, 1fr);
+  grid-template-columns: 260px minmax(0, 1fr);
   gap: 28px;
 }
 
 .footer-brand img {
-  width: 150px;
+  width: 260px;
   height: auto;
 }
 
@@ -926,14 +898,8 @@ body.site-home {
     min-height: 78px;
   }
 
-  .brand-seal {
-    width: 42px;
-    height: 42px;
-    font-size: 24px;
-  }
-
-  .brand-lockup strong {
-    font-size: 16px;
+  .brand-lockup img {
+    width: clamp(172px, 50vw, 210px);
   }
 
   .topbar-action {
@@ -1086,12 +1052,12 @@ body.site-home {
   }
 
   .footer-brand {
-    grid-template-columns: 110px minmax(0, 1fr);
+    grid-template-columns: 1fr;
     gap: 20px;
   }
 
   .footer-brand img {
-    width: 110px;
+    width: min(230px, 72vw);
   }
 
   .footer-links {
