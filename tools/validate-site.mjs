@@ -80,7 +80,7 @@ function validateTree(root, directory = root) {
     const file = join(directory, name);
     if (statSync(file).isDirectory()) {
       validateTree(root, file);
-    } else if (name.endsWith(".html")) {
+    } else if (name.endsWith(".html") && !/^baidu_verify_[^.]+\.html$/.test(name)) {
       validateHtml(file, root);
     } else if (name.endsWith(".json")) {
       try {

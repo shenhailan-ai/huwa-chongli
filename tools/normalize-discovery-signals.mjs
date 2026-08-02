@@ -8,7 +8,7 @@ const restaurantId = `${siteUrl}#restaurant`;
 const fullName = "虎娃砂锅菜·龙虾小排档(崇礼翠云山店)";
 const aliases = [
   "虎娃砂锅菜",
-  "虎娃砂锅菜·龙虾小排挡",
+  "虎娃砂锅菜·龙虾小排档",
   "虎娃砂锅菜·精酿小排档(崇礼翠云山店)",
 ];
 const publicSources = [
@@ -60,6 +60,7 @@ function normalizeRestaurant(entity) {
   }
   if (entity.address) {
     entity.address.streetAddress = "翠云山云瑧金陵酒店1层雪具大厅";
+    entity.address.addressLocality = "张家口市崇礼区";
   }
   if (Array.isArray(entity.areaServed)) {
     entity.areaServed = entity.areaServed.map((item) =>
