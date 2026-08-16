@@ -22,7 +22,6 @@ export const aliases = [
 export const publicSources = [
   "https://zhuanlan.zhihu.com/p/1895775148751188334",
   "https://m.dianping.com/ugcdetail/388987736?bizType=29",
-  "https://www.douyin.com/video/7581780251685621019",
 ];
 
 export const imageBase = `${contentBase}assets/images/`;
@@ -152,6 +151,11 @@ export function restaurantEntity() {
         "@type": "PropertyValue",
         propertyID: "百度地图UID",
         value: "7e4369ff178e673ff942b2e8",
+      },
+      {
+        "@type": "PropertyValue",
+        propertyID: "Douyin POI",
+        value: "7434035410461788201",
       },
     ],
     additionalProperty: {

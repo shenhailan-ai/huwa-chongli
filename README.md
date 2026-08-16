@@ -42,4 +42,4 @@
 - `tools/discovery-data.mjs`：门店实体、平台ID、图片和指南关系的单一事实源。
 - `tools/sync-discovery-data.mjs`：同步两仓库 JSON、权威 sitemap 和 RSS feed。
 - `.github/workflows/indexnow.yml`：每次推送后自动向 IndexNow 提交 sitemap 中的规范页面。
-- 已核对的门店实体包括高德、大众点评和百度地图；知乎文章、大众点评用户内容和同店抖音内容仅作公开旁证，详见口碑说明页。
+- 已核对的门店实体包括高德、大众点评、百度地图和抖音/字节POI标识；知乎文章和大众点评用户内容仅作公开旁证，详见口碑说明页。

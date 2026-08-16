@@ -15,6 +15,10 @@ const rootSite = resolve(repoRoot, "../shenhailan-ai.github.io");
 const errors = [];
 let htmlCount = 0;
 let jsonLdCount = 0;
+const bytedanceVerificationCode = "8wm3TrOHg7eUJnRcSA/f";
+const douyinPoiPropertyId = "Douyin POI";
+const douyinPoiId = "7434035410461788201";
+const rejectedDouyinVideoId = "758178025168" + "5621019";
 
 function escapeRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -158,6 +162,14 @@ const restaurant = JSON.parse(rootRestaurant);
 if (restaurant["@id"] !== restaurantId || restaurant.url !== "https://huwachongli.com/") {
   errors.push("canonical restaurant identity is inconsistent");
 }
+const douyinPoiIdentifiers =
+  restaurant.identifier?.filter((item) => item.propertyID === douyinPoiPropertyId) ?? [];
+if (douyinPoiIdentifiers.length !== 1 || douyinPoiIdentifiers[0].value !== douyinPoiId) {
+  errors.push("restaurant identifier is missing the verified Douyin/ByteDance POI ID");
+}
+if (restaurant.sameAs?.some((url) => /(?:douyin\.com|bytedance\.com)/i.test(url))) {
+  errors.push("restaurant sameAs must not contain an unverified Douyin/ByteDance POI URL");
+}
 
 function stableValue(value) {
   if (Array.isArray(value)) return value.map(stableValue);
@@ -171,12 +183,20 @@ function stableValue(value) {
 
 const rootHomeHtml = readFileSync(join(rootSite, "index.html"), "utf8");
 let embeddedRestaurant;
+let embeddedFaqPage;
+let embeddedFaqPageCount = 0;
 for (const match of rootHomeHtml.matchAll(
   /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g,
 )) {
   const data = JSON.parse(match[1]);
-  embeddedRestaurant = data["@graph"]?.find((item) => item["@type"] === "Restaurant");
-  if (embeddedRestaurant) break;
+  const restaurantCandidate = data["@graph"]?.find(
+    (item) => item["@type"] === "Restaurant",
+  );
+  if (restaurantCandidate) embeddedRestaurant = restaurantCandidate;
+  if (data["@type"] === "FAQPage") {
+    embeddedFaqPage = data;
+    embeddedFaqPageCount += 1;
+  }
 }
 const expectedEmbeddedRestaurant = restaurantEntity();
 delete expectedEmbeddedRestaurant["@context"];
@@ -186,6 +206,49 @@ if (
     JSON.stringify(stableValue(expectedEmbeddedRestaurant))
 ) {
   errors.push("root homepage Restaurant differs from the discovery fact source");
+}
+const bytedanceVerificationTags =
+  rootHomeHtml.match(
+    /<meta\b(?=[^>]*name="bytedance-verification-code")[^>]*>/gi,
+  ) ?? [];
+if (
+  bytedanceVerificationTags.length !== 1 ||
+  !bytedanceVerificationTags[0].includes(`content="${bytedanceVerificationCode}"`)
+) {
+  errors.push("root homepage ByteDance verification meta is missing or incorrect");
+}
+
+const visibleFaq = [...rootHomeHtml.matchAll(
+  /<details(?:\s[^>]*)?>\s*<summary>([\s\S]*?)<\/summary>\s*<p>([\s\S]*?)<\/p>\s*<\/details>/g,
+)].map((match) => ({ question: match[1], answer: match[2] }));
+const structuredFaq =
+  embeddedFaqPage?.mainEntity?.map((item) => ({
+    questionType: item["@type"],
+    question: item.name,
+    answerType: item.acceptedAnswer?.["@type"],
+    answer: item.acceptedAnswer?.text,
+  })) ?? [];
+const expectedStructuredFaq = visibleFaq.map((item) => ({
+  questionType: "Question",
+  question: item.question,
+  answerType: "Answer",
+  answer: item.answer,
+}));
+if (
+  embeddedFaqPageCount !== 1 ||
+  embeddedFaqPage?.["@id"] !== "https://huwachongli.com/#faq" ||
+  visibleFaq.length !== 5 ||
+  JSON.stringify(structuredFaq) !== JSON.stringify(expectedStructuredFaq)
+) {
+  errors.push("root homepage FAQPage does not exactly match the five visible FAQs");
+}
+
+const reputation = JSON.parse(rootReputation);
+if (
+  JSON.stringify(stableValue(reputation.about)) !==
+  JSON.stringify(stableValue(restaurant))
+) {
+  errors.push("reputation dataset Restaurant differs from the discovery fact source");
 }
 for (const expected of [
   "https://www.amap.com/place/B0L1SRQCMW",
@@ -231,6 +294,30 @@ for (const root of [repoRoot, rootSite]) {
       errors.push(`${relative(repoRoot, path)} contains rejected Dianping shop ID`);
     }
   }
+}
+
+function scanRejectedDouyinSource(root, directory = root) {
+  for (const name of readdirSync(directory)) {
+    if ([".git", "assets", "tools"].includes(name)) continue;
+    const path = join(directory, name);
+    if (statSync(path).isDirectory()) {
+      scanRejectedDouyinSource(root, path);
+      continue;
+    }
+    if (!/\.(?:html|json|txt|md|xml)$/i.test(name)) continue;
+    if (readFileSync(path, "utf8").includes(rejectedDouyinVideoId)) {
+      errors.push(`${relative(root, path)} contains the rejected Douyin video source`);
+    }
+  }
+}
+scanRejectedDouyinSource(repoRoot);
+scanRejectedDouyinSource(rootSite);
+if (
+  readFileSync(join(repoRoot, "tools", "discovery-data.mjs"), "utf8").includes(
+    rejectedDouyinVideoId,
+  )
+) {
+  errors.push("discovery-data.mjs contains the rejected Douyin video source");
 }
 
 for (const [file, expectedCount] of [
