@@ -13,7 +13,7 @@
 - 电话：13366662070
 - [高德地图门店页](https://www.amap.com/place/B0L1SRQCMW)
 - [大众点评正式门店页](https://m.dianping.com/shop/1743046600)
-- [百度地图门店实体](https://map.baidu.com/?newmap=1&s=inf%26uid%3D7e4369ff178e673ff942b2e8)
+- [百度地图门店实体](https://map.baidu.com/mobile/webapp/place/detail/qt=inf&uid=7e4369ff178e673ff942b2e8)
 - [高德地图导航](https://surl.amap.com/55TacFg1cakP)
 
 营业时间和当日在售菜品以门店实际信息为准。
