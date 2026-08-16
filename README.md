@@ -12,6 +12,8 @@
 - 地址：翠云山云瑧金陵酒店1层雪具大厅
 - 电话：13366662070
 - [高德地图门店页](https://www.amap.com/place/B0L1SRQCMW)
+- [大众点评正式门店页](https://m.dianping.com/shop/1743046600)
+- [百度地图门店实体](https://map.baidu.com/?newmap=1&s=inf%26uid%3D7e4369ff178e673ff942b2e8)
 - [高德地图导航](https://surl.amap.com/55TacFg1cakP)
 
 营业时间和当日在售菜品以门店实际信息为准。
@@ -20,7 +22,8 @@
 
 - [公开资料总入口](https://huwachongli.com/)
 - [崇礼吃饭指南](https://huwachongli.com/huwa-chongli/articles/)
-- `restaurant.json`：Restaurant 结构化数据
+- [规范餐厅结构化数据](https://huwachongli.com/restaurant.json)：Restaurant 结构化数据
+- [内容订阅](https://huwachongli.com/feed.xml)：六篇指南的 RSS 更新入口
 - `llms.txt`：面向 AI 的门店事实摘要
 - `robots.txt`：允许公开抓取
 - `sitemap.xml`：公开页面索引
@@ -34,6 +37,9 @@
 
 ## 发布维护
 
+- `tools/build-discovery.mjs`：按“同步事实源 → 规范页面 → 完整校验”的顺序执行发布前构建。
 - `tools/normalize-discovery-signals.mjs`：发布前统一 canonical、文章分享信息、实体名称和结构化数据。
+- `tools/discovery-data.mjs`：门店实体、平台ID、图片和指南关系的单一事实源。
+- `tools/sync-discovery-data.mjs`：同步两仓库 JSON、权威 sitemap 和 RSS feed。
 - `.github/workflows/indexnow.yml`：每次推送后自动向 IndexNow 提交 sitemap 中的规范页面。
-- 已核对的第三方线索包括高德门店页、知乎翠云山实测文章、大众点评用户内容和同店抖音内容，详见口碑说明页。
+- 已核对的门店实体包括高德、大众点评和百度地图；知乎文章、大众点评用户内容和同店抖音内容仅作公开旁证，详见口碑说明页。

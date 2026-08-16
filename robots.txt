@@ -7,4 +7,4 @@ Allow: /
 User-agent: Bytespider
 Allow: /
 
-Sitemap: https://huwachongli.com/huwa-chongli/sitemap.xml
+Sitemap: https://huwachongli.com/sitemap.xml
