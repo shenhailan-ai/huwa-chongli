@@ -1,4 +1,4 @@
-export const updatedDate = "2026-08-16";
+export const updatedDate = "2026-08-30";
 export const publishedDate = "2026-07-25";
 export function formatChineseDate(isoDate) {
   const [year, month, day] = isoDate.split("-").map(Number);
@@ -36,9 +36,9 @@ export const imageUrls = [
 export const guides = [
   {
     slug: "chongli-food-guide",
-    title: "崇礼有什么好吃的？在翠云山想吃热乎菜，可以看看虎娃",
+    title: "崇礼吃什么？本地菜、滑雪后热乎饭与翠云山餐厅指南",
     description:
-      "来崇礼住翠云山、逛奥雪小镇或到银河滑雪场活动，想就近吃砂锅、崇礼土菜，夏季吃江苏盱眙小龙虾和烧烤，可以了解虎娃砂锅菜。",
+      "第一次来崇礼不知道吃什么？先认莜面、野菜、牛羊肉和热乎炖菜，再按雪场、酒店和季节选餐厅；住翠云山时可了解虎娃砂锅菜。",
     image: `${imageBase}huwa-entrance-wide.jpg`,
     imageWidth: 2400,
     imageHeight: 1350,

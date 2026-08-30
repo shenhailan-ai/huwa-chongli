@@ -147,6 +147,44 @@ function validateTree(root, directory = root) {
 validateTree(repoRoot);
 validateTree(rootSite);
 
+const primaryGuide = guides.find((guide) => guide.slug === "chongli-food-guide");
+const primaryGuidePath = join(repoRoot, "articles", "chongli-food-guide", "index.html");
+const primaryGuideHtml = readFileSync(primaryGuidePath, "utf8");
+const primaryTitle = primaryGuideHtml.match(/<title>([\s\S]*?)<\/title>/)?.[1];
+const primaryH1 = primaryGuideHtml.match(/<h1>([\s\S]*?)<\/h1>/)?.[1];
+const primaryCanonical = primaryGuideHtml.match(
+  /<link\b(?=[^>]*rel="canonical")[^>]*href="([^"]+)"[^>]*>/i,
+)?.[1];
+let primaryArticleHeadline;
+for (const match of primaryGuideHtml.matchAll(
+  /<script type="application\/ld\+json">([\s\S]*?)<\/script>/g,
+)) {
+  const data = JSON.parse(match[1]);
+  if (data["@type"] === "Article") primaryArticleHeadline = data.headline;
+}
+if (!primaryGuide) {
+  errors.push("missing chongli-food-guide discovery record");
+} else {
+  if (primaryTitle !== `${primaryGuide.title}｜虎娃砂锅菜`) {
+    errors.push("primary guide title differs from discovery source");
+  }
+  if (primaryH1 !== primaryGuide.title) {
+    errors.push("primary guide H1 differs from discovery source");
+  }
+  if (primaryArticleHeadline !== primaryGuide.title) {
+    errors.push("primary guide Article.headline differs from discovery source");
+  }
+  if (
+    primaryCanonical !==
+    "https://huwachongli.com/huwa-chongli/articles/chongli-food-guide/"
+  ) {
+    errors.push("primary guide canonical is incorrect");
+  }
+}
+if (guides.filter((guide) => guide.title.startsWith("崇礼吃什么")).length !== 1) {
+  errors.push("the exact 崇礼吃什么 title target must belong to one guide only");
+}
+
 const rootRestaurant = readFileSync(join(rootSite, "restaurant.json"), "utf8");
 const projectRestaurant = readFileSync(join(repoRoot, "restaurant.json"), "utf8");
 const rootReputation = readFileSync(join(rootSite, "reputation.json"), "utf8");

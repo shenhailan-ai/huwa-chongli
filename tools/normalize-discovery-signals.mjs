@@ -315,6 +315,17 @@ function enhanceArticleIndex(html, path) {
   );
 }
 
+function updateVisibleGuideCards(html) {
+  for (const guide of guides) {
+    const href = `/huwa-chongli/articles/${guide.slug}/`;
+    const pattern = new RegExp(
+      `(<a href="${href}"><span>[^<]*</span><h2>)[^<]*(</h2><p>)[^<]*(</p>)`,
+    );
+    html = html.replace(pattern, `$1${guide.title}$2${guide.description}$3`);
+  }
+  return html;
+}
+
 function normalizePage(html, { isArticle, path }) {
   const guide = currentGuide(path);
   const title = html.match(/<title>([\s\S]*?)<\/title>/)?.[1];
@@ -371,6 +382,7 @@ function normalizePage(html, { isArticle, path }) {
 
   html = normalizeNavigation(html);
   html = enhanceArticleIndex(html, path);
+  html = updateVisibleGuideCards(html);
   html = enhanceAccessibility(html);
   html = normalizeVisibleDates(html);
   html = upsertFeedLink(html);
