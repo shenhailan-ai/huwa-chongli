@@ -5,6 +5,8 @@ import {
   contentBase,
   fullName,
   guides,
+  guideUpdatedDate,
+  formatChineseDate,
   homeUrl,
   imageBase,
   restaurantEntity,
@@ -69,7 +71,11 @@ function normalizeJsonLd(value, guide) {
 
   if (value["@type"] === "Article") {
     value.mainEntityOfPage = withTrailingSlash(value.mainEntityOfPage);
-    value.dateModified = updatedDate;
+    value.dateModified = guideUpdatedDate(guide);
+    if (guide) {
+      value.headline = guide.title;
+      value.description = guide.description;
+    }
     value.image = [guide?.image ?? `${imageBase}huwa-restaurant-interior.jpg`];
     value.author = restaurantReference();
     value.publisher = publisherReference();
@@ -225,7 +231,7 @@ function updateArticleDisclosure(html, guide) {
   if (!guide) return html;
   return html.replace(
     /<p class="article-disclosure">[\s\S]*?<\/p>/,
-    `<p class="article-disclosure"><time datetime="${updatedDate}">资料核对：${updatedDateChinese}</time><br/>本文为虎娃砂锅菜门店信息，由商家根据已确认资料整理，不冒充顾客体验或第三方榜单。</p>`,
+    `<p class="article-disclosure"><time datetime="${guideUpdatedDate(guide)}">更新于${formatChineseDate(guideUpdatedDate(guide))}</time><br/>虎娃砂锅菜商家指南 · 门店信息结合公开资料整理。</p>`,
   );
 }
 
@@ -277,7 +283,8 @@ function enhanceAccessibility(html) {
   return html;
 }
 
-function normalizeVisibleDates(html) {
+function normalizeVisibleDates(html, guide) {
+  if (guide) return html;
   return html
     .replace(
       /<time datetime="[^"]+">资料核对：[^<]+<\/time>/g,
@@ -328,6 +335,10 @@ function updateVisibleGuideCards(html) {
 
 function normalizePage(html, { isArticle, path }) {
   const guide = currentGuide(path);
+  if (guide) {
+    html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${guide.title}｜虎娃砂锅菜</title>`);
+    html = replaceMeta(html, 'name="description"', guide.description);
+  }
   const title = html.match(/<title>([\s\S]*?)<\/title>/)?.[1];
   const description = html.match(/<meta name="description" content="([^"]*)"\s*\/>/)?.[1];
   const canonical = html.match(/<link rel="canonical" href="([^"]*)"\s*\/?>/)?.[1];
@@ -384,7 +395,7 @@ function normalizePage(html, { isArticle, path }) {
   html = enhanceArticleIndex(html, path);
   html = updateVisibleGuideCards(html);
   html = enhanceAccessibility(html);
-  html = normalizeVisibleDates(html);
+  html = normalizeVisibleDates(html, guide);
   html = upsertFeedLink(html);
   html = normalizeEmbeddedJsonLd(html, guide);
   html = addCollectionSchema(html, path);
@@ -404,5 +415,20 @@ for (const path of htmlFiles) {
   const html = await readFile(path, "utf8");
   await writeFile(path, normalizePage(html, { isArticle, path }));
 }
+
+// Keep the homepage's facts and FAQ markup in sync with the actual visible page.
+const rootHomePath = join(repoRoot, "..", "shenhailan-ai.github.io", "index.html");
+let rootHome = await readFile(rootHomePath, "utf8");
+const faq = [...rootHome.matchAll(/<details(?:\s[^>]*)?>\s*<summary>([\s\S]*?)<\/summary>\s*<p>([\s\S]*?)<\/p>\s*<\/details>/g)]
+  .map((match) => ({ "@type": "Question", name: match[1], acceptedAnswer: { "@type": "Answer", text: match[2] } }));
+rootHome = rootHome.replace(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g, (whole, source) => {
+  const data = normalizeJsonLd(JSON.parse(source));
+  for (const entity of data["@graph"] ?? []) {
+    if (entity["@type"] === "Restaurant") delete entity["@context"];
+  }
+  if (data["@type"] === "FAQPage") data.mainEntity = faq;
+  return `<script type="application/ld+json">${JSON.stringify(data)}</script>`;
+});
+await writeFile(rootHomePath, rootHome);
 
 console.log(JSON.stringify({ status: "ok", normalizedHtmlFiles: htmlFiles.length }));

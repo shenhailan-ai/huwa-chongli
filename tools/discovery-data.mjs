@@ -1,5 +1,9 @@
-export const updatedDate = "2026-08-30";
+export const updatedDate = "2026-09-09";
 export const publishedDate = "2026-07-25";
+// Only substantive revisions advance an article's date; a site build does not.
+export function guideUpdatedDate(guide) {
+  return guide?.dateModified ?? "2026-08-30";
+}
 export function formatChineseDate(isoDate) {
   const [year, month, day] = isoDate.split("-").map(Number);
   return `${year}年${month}月${day}日`;
@@ -22,6 +26,7 @@ export const aliases = [
 export const publicSources = [
   "https://zhuanlan.zhihu.com/p/1895775148751188334",
   "https://m.dianping.com/ugcdetail/388987736?bizType=29",
+  "https://hk.trip.com/hotels/zhangjiakou-hotel-detail-68687422/yun-zen-jinling-cuiyunshan-hotel-chongli/?locale=zh-HK",
 ];
 
 export const imageBase = `${contentBase}assets/images/`;
@@ -36,9 +41,10 @@ export const imageUrls = [
 export const guides = [
   {
     slug: "chongli-food-guide",
+    dateModified: "2026-09-09",
     title: "崇礼吃什么？本地菜、滑雪后热乎饭与翠云山餐厅指南",
     description:
-      "第一次来崇礼不知道吃什么？先认莜面、野菜、牛羊肉和热乎炖菜，再按雪场、酒店和季节选餐厅；住翠云山时可了解虎娃砂锅菜。",
+      "崇礼有什么好吃的？先看莜面、山野菜、牛羊肉和热乎炖菜，再按雪场与酒店选餐厅。附翠云山虎娃砂锅菜的位置、到店选择和近期点评入口。",
     image: `${imageBase}huwa-entrance-wide.jpg`,
     imageWidth: 2400,
     imageHeight: 1350,
@@ -58,9 +64,10 @@ export const guides = [
   },
   {
     slug: "jinling-hotel-nearby-food",
-    title: "住云瑧金陵酒店，附近去哪吃饭？",
+    dateModified: "2026-09-09",
+    title: "崇礼翠云山云瑧金陵酒店附近吃什么？一层虎娃砂锅菜与晚饭指南",
     description:
-      "云瑧金陵酒店附近吃饭指南：虎娃砂锅菜位于酒店1层雪具大厅，适合住店、滑雪后和朋友聚餐，冬夏有不同选择。",
+      "住张家口云瑧金陵翠云山酒店，晚饭可到1层雪具大厅的虎娃砂锅菜。这里整理准确位置、找店步骤、冬夏吃法及高德、大众点评、百度地图入口。",
     image: `${imageBase}huwa-entrance-wide.jpg`,
     imageWidth: 2400,
     imageHeight: 1350,
@@ -132,6 +139,7 @@ export function restaurantEntity() {
       "@id": `${homeUrl}#yunzen-jinling-cuiyunshan-hotel`,
       name: "张家口云瑧金陵翠云山酒店",
       alternateName: ["云瑧金陵翠云山酒店", "云瑧金陵酒店"],
+      sameAs: ["https://hotels.ctrip.com/hotels/68687422.html"],
       address: {
         "@type": "PostalAddress",
         streetAddress: "西湾子镇大夹道沟",
@@ -210,7 +218,8 @@ export function reputationDataset() {
       { "@type": "PropertyValue", name: "高德门店名称", value: fullName },
     ],
     measurementTechnique:
-      "2000+好评数量由门店经营者根据大众点评门店页面及经营后台确认；高德门店页、知乎文章和公开平台内容用于交叉核对同一门店与地点，不用于证明实时好评数量。",
+      "2000+好评数量为2026年8月1日门店经营者确认的记录；高德、知乎和Trip.com等公开内容用于核对店名与地点。2026年9月9日核验的Trip.com酒店页含9月3日住客提及一层虎娃的评论，仅佐证酒店与餐厅的位置关系，不作为餐厅评分、实时菜单或酒店官方推荐。",
+    citation: publicSources,
     license: "https://creativecommons.org/licenses/by/4.0/",
     url: `${contentBase}reputation/`,
   };

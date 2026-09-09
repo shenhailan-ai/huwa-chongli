@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import {
   formatRfcDate,
   guides,
+  guideUpdatedDate,
   publishedDate,
   restaurantEntity,
   restaurantId,
@@ -27,6 +28,7 @@ function escapeRegex(value) {
 function validateHtml(file, root) {
   htmlCount += 1;
   const html = readFileSync(file, "utf8");
+  const guide = guides.find((item) => file.endsWith(`${sep}articles${sep}${item.slug}${sep}index.html`));
   const ogImage = html.match(
     /<meta\b(?=[^>]*property="og:image")[^>]*content="([^"]*)"[^>]*>/i,
   )?.[1];
@@ -63,12 +65,15 @@ function validateHtml(file, root) {
         }
       }
       if (data["@type"] === "Article") {
+        if (guide && (data.headline !== guide.title || data.description !== guide.description)) {
+          errors.push(`${relative(root, file)}: Article title/description differs from discovery source`);
+        }
         if (!Array.isArray(data.image) || data.image.length !== 1) {
           errors.push(`${relative(root, file)}: Article.image must have one item`);
         } else if (data.image[0] !== ogImage) {
           errors.push(`${relative(root, file)}: Article.image differs from og:image`);
         }
-        if (data.dateModified !== updatedDate) {
+        if (data.dateModified !== guideUpdatedDate(guide)) {
           errors.push(`${relative(root, file)}: stale Article.dateModified`);
         }
         if (data.author?.["@id"] !== restaurantId || data.publisher?.["@id"] !== restaurantId) {
@@ -117,7 +122,7 @@ function validateHtml(file, root) {
     if (!html.includes('class="visible-breadcrumb"')) {
       errors.push(`${relative(root, file)}: missing visible breadcrumb`);
     }
-    if (!html.includes(`datetime="${updatedDate}"`)) {
+    if (!html.includes(`datetime="${guideUpdatedDate(guide)}"`)) {
       errors.push(`${relative(root, file)}: missing visible verification date`);
     }
     if (!html.includes('loading="lazy"')) {
@@ -275,10 +280,10 @@ const expectedStructuredFaq = visibleFaq.map((item) => ({
 if (
   embeddedFaqPageCount !== 1 ||
   embeddedFaqPage?.["@id"] !== "https://huwachongli.com/#faq" ||
-  visibleFaq.length !== 5 ||
+  visibleFaq.length !== 6 ||
   JSON.stringify(structuredFaq) !== JSON.stringify(expectedStructuredFaq)
 ) {
-  errors.push("root homepage FAQPage does not exactly match the five visible FAQs");
+  errors.push("root homepage FAQPage does not exactly match the six visible FAQs");
 }
 
 const reputation = JSON.parse(rootReputation);
@@ -308,9 +313,8 @@ if (!existsSync(feedPath)) {
   }
   for (const guide of guides) {
     const url = `https://huwachongli.com/huwa-chongli/articles/${guide.slug}/`;
-    const item = feed.match(
-      new RegExp(`<item>[\\s\\S]*?<guid isPermaLink="true">${escapeRegex(url)}</guid>[\\s\\S]*?</item>`),
-    )?.[0];
+    const item = (feed.match(/<item>[\s\S]*?<\/item>/g) ?? [])
+      .find((entry) => entry.includes(`<guid isPermaLink="true">${url}</guid>`));
     if (!item) {
       errors.push(`feed.xml missing item for ${guide.slug}`);
       continue;
@@ -318,7 +322,7 @@ if (!existsSync(feedPath)) {
     if (!item.includes(`<pubDate>${formatRfcDate(publishedDate)}</pubDate>`)) {
       errors.push(`feed.xml ${guide.slug} has a stale pubDate`);
     }
-    if (!item.includes(`<dcterms:modified>${updatedDate}</dcterms:modified>`)) {
+    if (!item.includes(`<dcterms:modified>${guideUpdatedDate(guide)}</dcterms:modified>`)) {
       errors.push(`feed.xml ${guide.slug} has a stale modified date`);
     }
   }

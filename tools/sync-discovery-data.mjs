@@ -6,6 +6,7 @@ import {
   formatRfcDate,
   fullName,
   guides,
+  guideUpdatedDate,
   homeUrl,
   imageUrls,
   publishedDate,
@@ -44,7 +45,7 @@ const rssItems = guides
       <guid isPermaLink="true">${contentBase}articles/${guide.slug}/</guid>
       <description>${escapeXml(guide.description)}</description>
       <pubDate>${formatRfcDate(publishedDate)}</pubDate>
-      <dcterms:modified>${updatedDate}</dcterms:modified>
+      <dcterms:modified>${guideUpdatedDate(guide)}</dcterms:modified>
     </item>`,
   )
   .join("\n");
@@ -77,7 +78,7 @@ const rootUrls = [
   `  <url><loc>${contentBase}articles/</loc><lastmod>${updatedDate}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>`,
   ...guides.map(
     (guide) =>
-      `  <url><loc>${contentBase}articles/${guide.slug}/</loc><lastmod>${updatedDate}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority>${imageEntry(guide.image, guide.imageAlt)}</url>`,
+      `  <url><loc>${contentBase}articles/${guide.slug}/</loc><lastmod>${guideUpdatedDate(guide)}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority>${imageEntry(guide.image, guide.imageAlt)}</url>`,
   ),
 ];
 
