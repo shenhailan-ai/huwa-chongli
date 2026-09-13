@@ -8,12 +8,14 @@ import {
   guideUpdatedDate,
   formatChineseDate,
   homeUrl,
+  homeShareImage,
   imageBase,
   restaurantEntity,
   restaurantId,
   updatedDate,
   updatedDateChinese,
 } from "./discovery-data.mjs";
+import { guideContent } from "./guide-content.mjs";
 
 const repoRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const guideBySlug = new Map(guides.map((guide) => [guide.slug, guide]));
@@ -106,6 +108,11 @@ function normalizeJsonLd(value, guide) {
   if (value["@type"] === "BreadcrumbList" && Array.isArray(value.itemListElement)) {
     const first = value.itemListElement.find((item) => item.position === 1);
     if (first) first.item = homeUrl;
+    if (guide) {
+      const last = value.itemListElement.at(-1);
+      last.name = guide.title;
+      last.item = `${contentBase}articles/${guide.slug}/`;
+    }
   }
 
   return value;
@@ -338,6 +345,17 @@ function normalizePage(html, { isArticle, path }) {
   if (guide) {
     html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${guide.title}｜虎娃砂锅菜</title>`);
     html = replaceMeta(html, 'name="description"', guide.description);
+    html = html.replace(/<h1>[\s\S]*?<\/h1>/, `<h1>${guide.title}</h1>`);
+    html = html.replace(/<span aria-current="page">[^<]*<\/span>/, `<span aria-current="page">${guide.title}</span>`);
+    const content = guideContent[guide.slug];
+    if (content) {
+      html = html.replace(/<p class="article-lead">[\s\S]*?<\/p>/, `<p class="article-lead">${content.lead}</p>`);
+      // The authored body includes its location/source block. Keep only the
+      // generated related links so repeat builds cannot duplicate that block.
+      const bodyPattern = /(<div class="article-body">)[\s\S]*?(<section class="related-articles">)/;
+      if (!bodyPattern.test(html)) throw new Error(`Missing editorial body boundary: ${guide.slug}`);
+      html = html.replace(bodyPattern, (_, start, end) => `${start}${content.body}${end}`);
+    }
   }
   const title = html.match(/<title>([\s\S]*?)<\/title>/)?.[1];
   const description = html.match(/<meta name="description" content="([^"]*)"\s*\/>/)?.[1];
@@ -419,6 +437,14 @@ for (const path of htmlFiles) {
 // Keep the homepage's facts and FAQ markup in sync with the actual visible page.
 const rootHomePath = join(repoRoot, "..", "shenhailan-ai.github.io", "index.html");
 let rootHome = await readFile(rootHomePath, "utf8");
+for (const [selector, value] of [
+  ['property="og:image"', homeShareImage.url],
+  ['property="og:image:width"', String(homeShareImage.width)],
+  ['property="og:image:height"', String(homeShareImage.height)],
+  ['property="og:image:alt"', homeShareImage.alt],
+  ['name="twitter:image"', homeShareImage.url],
+  ['name="twitter:image:alt"', homeShareImage.alt],
+]) rootHome = replaceMeta(rootHome, selector, value);
 const faq = [...rootHome.matchAll(/<details(?:\s[^>]*)?>\s*<summary>([\s\S]*?)<\/summary>\s*<p>([\s\S]*?)<\/p>\s*<\/details>/g)]
   .map((match) => ({ "@type": "Question", name: match[1], acceptedAnswer: { "@type": "Answer", text: match[2] } }));
 rootHome = rootHome.replace(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g, (whole, source) => {

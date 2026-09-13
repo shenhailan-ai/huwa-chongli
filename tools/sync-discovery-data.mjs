@@ -4,11 +4,10 @@ import { fileURLToPath } from "node:url";
 import {
   contentBase,
   formatRfcDate,
-  fullName,
   guides,
   guideUpdatedDate,
   homeUrl,
-  imageUrls,
+  homeImages,
   publishedDate,
   reputationDataset,
   restaurantEntity,
@@ -70,8 +69,8 @@ function imageEntry(image, title) {
 }
 
 const rootUrls = [
-  `  <url><loc>${homeUrl}</loc><lastmod>${updatedDate}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority>${imageUrls
-    .map((image, index) => imageEntry(image, `${fullName}真实图片${index + 1}`))
+  `  <url><loc>${homeUrl}</loc><lastmod>${updatedDate}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority>${homeImages
+    .map((image) => imageEntry(image.url, image.alt))
     .join("")}</url>`,
   `  <url><loc>${contentBase}</loc><lastmod>${updatedDate}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>`,
   `  <url><loc>${contentBase}reputation/</loc><lastmod>${updatedDate}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>`,

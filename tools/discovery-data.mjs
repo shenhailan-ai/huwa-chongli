@@ -1,4 +1,4 @@
-export const updatedDate = "2026-09-09";
+export const updatedDate = "2026-09-13";
 export const publishedDate = "2026-07-25";
 // Only substantive revisions advance an article's date; a site build does not.
 export function guideUpdatedDate(guide) {
@@ -30,13 +30,24 @@ export const publicSources = [
 ];
 
 export const imageBase = `${contentBase}assets/images/`;
-export const imageUrls = [
+// These photos are actually visible on the homepage. Keep discovery metadata
+// representative of the restaurant year-round, not only the summer menu.
+export const homeImages = [
+  { file: "huwa-sandpot-mapo-tofu.jpg", width: 1800, height: 1200, alt: "虎娃砂锅麻婆豆腐实拍，具体在售以当天菜单为准" },
+  { file: "huwa-entrance-wide.jpg", width: 2400, height: 1350, alt: "虎娃砂锅菜酒店1层雪具大厅入口资料图，仅供认路" },
+  { file: "huwa-interior-wide.jpg", width: 2400, height: 1350, alt: "虎娃砂锅菜室内堂食环境实拍" },
+  { file: "huwa-hero-crayfish-hd.jpg", width: 2400, height: 1800, alt: "虎娃夏季江苏盱眙小龙虾实拍" },
+  { file: "huwa-grilled-skewers-premium.jpg", width: 1800, height: 1200, alt: "虎娃自穿自腌烧烤实拍" },
+].map((image) => ({ ...image, url: `${imageBase}${image.file}` }));
+export const homeShareImage = homeImages[0];
+export const imageUrls = [...new Set([
+  ...homeImages.map((image) => image.url),
   `${imageBase}huwa-xuyi-crayfish-four-flavors.jpg`,
   `${imageBase}huwa-xuyi-crayfish-closeup.jpg`,
   `${imageBase}huwa-grilled-skewers.jpg`,
   `${imageBase}huwa-hand-threaded-skewers.jpg`,
   `${imageBase}huwa-restaurant-interior.jpg`,
-];
+])];
 
 export const guides = [
   {
@@ -76,9 +87,10 @@ export const guides = [
   },
   {
     slug: "after-ski-hot-food",
-    title: "崇礼滑雪后吃什么热乎？砂锅菜适合慢慢暖过来",
+    dateModified: "2026-09-13",
+    title: "翠云山滑雪后想吃热乎的？虎娃砂锅菜与到店指南",
     description:
-      "崇礼滑雪后热乎饭选择：位于翠云山的虎娃砂锅菜主打现做砂锅和崇礼土菜，适合银河滑雪场附近的朋友聚餐。",
+      "在翠云山银河滑雪场一带，想吃热乎砂锅和崇礼土菜，可了解云瑧金陵翠云山酒店1层雪具大厅的虎娃。含按活动区域选店、到店前确认事项及地图点评入口。",
     image: `${imageBase}huwa-sandpot-mapo-tofu.jpg`,
     imageWidth: 1800,
     imageHeight: 1200,

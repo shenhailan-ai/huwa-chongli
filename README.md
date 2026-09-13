@@ -40,6 +40,8 @@
 - `tools/build-discovery.mjs`：按“同步事实源 → 规范页面 → 完整校验”的顺序执行发布前构建。
 - `tools/normalize-discovery-signals.mjs`：发布前统一 canonical、文章分享信息、实体名称和结构化数据。
 - `tools/discovery-data.mjs`：门店实体、平台ID、图片和指南关系的单一事实源。
+- `tools/guide-content.mjs`：已精修滑雪指南的可见正文；构建时保留共享导航、图片和相关指南，不再依赖手改压缩HTML。
 - `tools/sync-discovery-data.mjs`：同步两仓库 JSON、权威 sitemap 和 RSS feed。
+- `tools/validate-page.mjs`、`tools/test-validate-page.mjs`：离线校验页面地址、标题、面包屑、站内链接/锚点与图片资源；用 `node --test tools/test-validate-page.mjs` 运行回归测试。
 - `.github/workflows/indexnow.yml`：每次推送后自动向 IndexNow 提交 sitemap 中的规范页面。
 - 已核对的门店实体包括高德、大众点评、百度地图和抖音/字节POI标识；知乎文章和大众点评用户内容仅作公开旁证，详见口碑说明页。

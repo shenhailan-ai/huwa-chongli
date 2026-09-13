@@ -1,10 +1,13 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { validateHomeImages, validatePage } from "./validate-page.mjs";
 import {
   formatRfcDate,
   guides,
   guideUpdatedDate,
+  homeImages,
+  homeShareImage,
   publishedDate,
   restaurantEntity,
   restaurantId,
@@ -25,6 +28,30 @@ function escapeRegex(value) {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+const resourceCache = new Map();
+function lookupResource(url) {
+  if (resourceCache.has(url)) return resourceCache.get(url);
+  let pathname;
+  try {
+    pathname = decodeURIComponent(new URL(url).pathname);
+  } catch {
+    return { exists: false };
+  }
+  const isProject = pathname === "/huwa-chongli" || pathname.startsWith("/huwa-chongli/");
+  const root = isProject ? repoRoot : rootSite;
+  let file = resolve(root, "." + (isProject ? pathname.replace(/^\/huwa-chongli/, "") || "/" : pathname));
+  if (file !== root && !file.startsWith(root + sep)) return { exists: false };
+  if (existsSync(file) && statSync(file).isDirectory()) file = join(file, "index.html");
+  const exists = existsSync(file) && statSync(file).isFile();
+  const resource = { exists };
+  // Verification files are only checked for existence, never read here.
+  if (exists && file.endsWith(".html") && !/[/\\]baidu_verify_[^/\\]+$/.test(file)) {
+    resource.html = readFileSync(file, "utf8");
+  }
+  resourceCache.set(url, resource);
+  return resource;
+}
+
 function validateHtml(file, root) {
   htmlCount += 1;
   const html = readFileSync(file, "utf8");
@@ -33,10 +60,10 @@ function validateHtml(file, root) {
     /<meta\b(?=[^>]*property="og:image")[^>]*content="([^"]*)"[^>]*>/i,
   )?.[1];
 
-  const canonicalCount = html.match(/<link\b(?=[^>]*rel="canonical")[^>]*>/gi)?.length ?? 0;
-  if (canonicalCount !== 1) {
-    errors.push(`${relative(root, file)}: canonical count is ${canonicalCount}`);
-  }
+  const path = relative(root, file).split(sep).join("/").replace(/(^|\/)index\.html$/, "$1");
+  const pageUrl = "https://huwachongli.com/" + (root === repoRoot ? "huwa-chongli/" : "") + path;
+  errors.push(...validatePage({ html, pageUrl, guide, lookupResource })
+    .map((error) => relative(root, file) + ": " + error));
 
   const feedCount =
     html.match(/<link\b(?=[^>]*type="application\/rss\+xml")[^>]*>/gi)?.length ?? 0;
@@ -85,15 +112,6 @@ function validateHtml(file, root) {
     }
   }
 
-  for (const match of html.matchAll(
-    /(?:src|href|srcset)="(\/huwa-chongli\/(?:assets\/images\/[^"]+|(?:article-images|site)\.css))"/g,
-  )) {
-    const local = join(repoRoot, match[1].replace(/^\/huwa-chongli\//, ""));
-    if (!existsSync(local)) {
-      errors.push(`${relative(root, file)}: missing ${match[1]}`);
-    }
-  }
-
   for (const selector of ['property="og:image"', 'name="twitter:image"']) {
     const pattern = new RegExp(
       `<meta\\b(?=[^>]*${escapeRegex(selector)})[^>]*>`,
@@ -124,9 +142,6 @@ function validateHtml(file, root) {
     }
     if (!html.includes(`datetime="${guideUpdatedDate(guide)}"`)) {
       errors.push(`${relative(root, file)}: missing visible verification date`);
-    }
-    if (!html.includes('loading="lazy"')) {
-      errors.push(`${relative(root, file)}: article image is not lazy loaded`);
     }
   }
 }
@@ -225,6 +240,13 @@ function stableValue(value) {
 }
 
 const rootHomeHtml = readFileSync(join(rootSite, "index.html"), "utf8");
+errors.push(...validateHomeImages({
+  html: rootHomeHtml,
+  pageUrl: "https://huwachongli.com/",
+  homeImages,
+  homeShareImage,
+  sitemap: readFileSync(join(rootSite, "sitemap.xml"), "utf8"),
+}));
 let embeddedRestaurant;
 let embeddedFaqPage;
 let embeddedFaqPageCount = 0;
@@ -347,6 +369,7 @@ function scanRejectedDouyinSource(root, directory = root) {
       continue;
     }
     if (!/\.(?:html|json|txt|md|xml)$/i.test(name)) continue;
+    if (/^baidu_verify_/i.test(name) || /^[a-f0-9]{32}\.txt$/i.test(name)) continue;
     if (readFileSync(path, "utf8").includes(rejectedDouyinVideoId)) {
       errors.push(`${relative(root, path)} contains the rejected Douyin video source`);
     }
