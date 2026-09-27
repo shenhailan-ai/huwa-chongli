@@ -60,6 +60,7 @@ export const guides = [
     imageWidth: 2400,
     imageHeight: 1350,
     imageAlt: "虎娃砂锅菜翠云山门店入口实拍",
+    imageCaption: "酒店1层雪具大厅内。入口资料图仅供认路，画面中的价位和历史牌面不作为当前报价或评级。",
     related: ["cuiyunshan-restaurant", "jinling-hotel-nearby-food", "chongli-summer-night-food"],
   },
   {
@@ -83,6 +84,7 @@ export const guides = [
     imageWidth: 2400,
     imageHeight: 1350,
     imageAlt: "虎娃砂锅菜位于云瑧金陵酒店1层雪具大厅的门店入口实拍",
+    imageCaption: "酒店1层雪具大厅内。入口资料图仅供认路，画面中的价位和历史牌面不作为当前报价或评级。",
     related: ["cuiyunshan-restaurant", "chongli-food-guide", "after-ski-hot-food"],
   },
   {

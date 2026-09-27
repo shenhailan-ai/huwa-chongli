@@ -244,7 +244,8 @@ function updateArticleDisclosure(html, guide) {
 
 function updateArticlePhoto(html, guide) {
   if (!guide) return html;
-  const figure = `<figure class="article-photo"><img src="${guide.image}" width="${guide.imageWidth}" height="${guide.imageHeight}" alt="${guide.imageAlt}" loading="lazy" decoding="async"/><figcaption>${guide.imageAlt}</figcaption></figure>`;
+  const caption = guide.imageCaption ?? guide.imageAlt;
+  const figure = `<figure class="article-photo"><img src="${guide.image}" width="${guide.imageWidth}" height="${guide.imageHeight}" alt="${guide.imageAlt}" loading="lazy" decoding="async"/><figcaption>${caption}</figcaption></figure>`;
   if (html.includes('class="article-photo"')) {
     return html.replace(/<figure class="article-photo">[\s\S]*?<\/figure>/, figure);
   }

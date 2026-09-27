@@ -133,6 +133,16 @@ export function validatePage({ html, pageUrl, guide, lookupResource }) {
     if (currentItems.length !== 1 || textContent(currentItems[0]?.[3]) !== guide.title) {
       errors.push("visible breadcrumb differs from guide title");
     }
+    if (guide.imageCaption) {
+      const photos = [...markup.matchAll(/<figure\b([^>]*)>([\s\S]*?)<\/figure>/gi)]
+        .filter((match) => (attributes(match[1]).class ?? "").split(/\s+/).includes("article-photo"));
+      const captions = photos.flatMap((match) =>
+        [...match[2].matchAll(/<figcaption\b[^>]*>([\s\S]*?)<\/figcaption>/gi)]);
+      if (photos.length !== 1 || captions.length !== 1 ||
+          textContent(captions[0]?.[1]) !== guide.imageCaption) {
+        errors.push("article photo caption differs from guide imageCaption");
+      }
+    }
   }
 
   function checkUrl(raw, context, checkFragment = false) {

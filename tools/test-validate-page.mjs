@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { parseSrcset, validateHomeImages, validatePage } from "./validate-page.mjs";
+import { guides } from "./discovery-data.mjs";
 
 const origin = "https://huwachongli.com";
 const pageUrl = origin + "/huwa-chongli/articles/example/";
@@ -38,7 +39,7 @@ function fixture({ article = {}, breadcrumb = {}, extra = "", graph = false } = 
     extra + '</body></html>';
 }
 
-function check(html, { absent = [], onLookup } = {}) {
+function check(html, { absent = [], onLookup, expectedGuide = guide } = {}) {
   const resources = new Map([
     [origin + "/", { exists: true, html: '<section id="location"></section>' }],
     [pageUrl, { exists: true, html }],
@@ -48,7 +49,7 @@ function check(html, { absent = [], onLookup } = {}) {
   ]);
   for (const missing of absent) resources.delete(missing);
   return validatePage({
-    html, pageUrl, guide,
+    html, pageUrl, guide: expectedGuide,
     lookupResource(url) {
       onLookup?.(url);
       return resources.get(url) ?? { exists: false };
@@ -177,6 +178,35 @@ test("HTML comments cannot supply canonical tags or missing anchor targets", () 
 
 test("above-fold eager images are allowed without mandatory lazy loading", () => {
   assert.deepEqual(check(fixture().replace('<img src=', '<img loading="eager" fetchpriority="high" src=')), []);
+});
+
+const entranceCaption = "酒店1层雪具大厅内。入口资料图仅供认路，画面中的价位和历史牌面不作为当前报价或评级。";
+
+test("entrance guides retain the historical price and signage disclaimer", () => {
+  for (const slug of ["chongli-food-guide", "jinling-hotel-nearby-food"]) {
+    const entry = guides.find((item) => item.slug === slug);
+    assert.equal(entry.imageCaption, entranceCaption, slug);
+    assert.ok(!entry.imageAlt.includes("报价"), "Keep the descriptive alt separate from the caption");
+  }
+});
+
+test("declared article photo captions must be visible and match their source", () => {
+  const expectedGuide = { ...guide, imageCaption: entranceCaption };
+  const photo = '<figure class="article-photo"><img src="' + image +
+    '"><figcaption>' + entranceCaption + '</figcaption></figure>';
+  assert.deepEqual(check(fixture({ extra: photo }), { expectedGuide }), []);
+  for (const extra of ["", photo.replace(entranceCaption, "门店入口实拍"), photo + photo,
+    '<!-- ' + photo + ' -->', photo.replace('class="article-photo"', 'class="other-photo"')]) {
+    hasError(check(fixture({ extra }), { expectedGuide }), /article photo caption differs/);
+  }
+});
+
+test("article photo caption checks preserve descriptive alt and unrelated guide behavior", () => {
+  const expectedGuide = { ...guide, imageCaption: entranceCaption };
+  const photo = '<figure class="article-photo"><img src="' + image +
+    '" alt="门店入口实拍"><figcaption><span>' + entranceCaption + '</span></figcaption></figure>';
+  assert.deepEqual(check(fixture({ extra: photo }), { expectedGuide }), []);
+  assert.deepEqual(check(fixture()), []);
 });
 
 const homeImage = { url: image, width: 1200, height: 800, alt: "真实砂锅" };
