@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import { validateHomeImages, validatePage } from "./validate-page.mjs";
 import {
   formatRfcDate,
+  collectionUpdatedDate,
   guides,
   guideUpdatedDate,
   homeImages,
@@ -55,6 +56,9 @@ function lookupResource(url) {
 function validateHtml(file, root) {
   htmlCount += 1;
   const html = readFileSync(file, "utf8");
+  if (/凉拌崇礼莜面|凉拌本地野菜|崇礼土豆炖牛肉/.test(html)) {
+    errors.push(`${relative(root, file)}: retired menu claims must not reappear without new verification`);
+  }
   const guide = guides.find((item) => file.endsWith(`${sep}articles${sep}${item.slug}${sep}index.html`));
   const ogImage = html.match(
     /<meta\b(?=[^>]*property="og:image")[^>]*content="([^"]*)"[^>]*>/i,
@@ -83,6 +87,11 @@ function validateHtml(file, root) {
         if (Array.isArray(current)) {
           queue.push(...current);
         } else if (current && typeof current === "object") {
+          if ((current["@type"] === "CollectionPage" ||
+              (current["@type"] === "WebPage" && current.url === "https://huwachongli.com/")) &&
+              current.dateModified !== collectionUpdatedDate) {
+            errors.push(`${relative(root, file)}: page editorial date differs from collection revision`);
+          }
           if (current["@type"] === "Restaurant" && current["@id"] !== restaurantId) {
             errors.push(
               `${relative(root, file)}: Restaurant @id is ${current["@id"] ?? "missing"}`,
@@ -201,8 +210,11 @@ if (!primaryGuide) {
     errors.push("primary guide canonical is incorrect");
   }
 }
-if (guides.filter((guide) => guide.title.startsWith("崇礼吃什么")).length !== 1) {
-  errors.push("the exact 崇礼吃什么 title target must belong to one guide only");
+const broadQuestionGuides = guides.filter((guide) =>
+  /^(?:崇礼有什么好吃的|崇礼吃什么|到崇礼应该吃什么)/.test(guide.title),
+);
+if (broadQuestionGuides.length !== 1 || broadQuestionGuides[0]?.slug !== "chongli-food-guide") {
+  errors.push("the broad Chongli food question title must belong to the one primary guide");
 }
 
 const rootRestaurant = readFileSync(join(rootSite, "restaurant.json"), "utf8");
@@ -330,7 +342,7 @@ if (!existsSync(feedPath)) {
   const feed = readFileSync(feedPath, "utf8");
   const itemCount = feed.match(/<item>/g)?.length ?? 0;
   if (itemCount !== 6) errors.push(`feed.xml item count is ${itemCount}`);
-  if (!feed.includes(`<lastBuildDate>${formatRfcDate(updatedDate)}</lastBuildDate>`)) {
+  if (!feed.includes(`<lastBuildDate>${formatRfcDate(collectionUpdatedDate)}</lastBuildDate>`)) {
     errors.push("feed.xml has a stale lastBuildDate");
   }
   for (const guide of guides) {

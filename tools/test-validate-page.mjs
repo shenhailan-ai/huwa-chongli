@@ -1,7 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { parseSrcset, validateHomeImages, validatePage } from "./validate-page.mjs";
-import { guides } from "./discovery-data.mjs";
+import { guides, guideUpdatedDate, updatedDate, collectionUpdatedDate } from "./discovery-data.mjs";
+import { guideContent } from "./guide-content.mjs";
 
 const origin = "https://huwachongli.com";
 const pageUrl = origin + "/huwa-chongli/articles/example/";
@@ -253,4 +254,87 @@ test("missing, duplicate and unapproved homepage sitemap images fail", () => {
     input.sitemap = input.sitemap.replace(image, replacement);
     hasError(validateHomeImages(input), /sitemap image list differs/);
   }
+});
+
+test("the two generic questions keep one existing primary guide and no duplicate page", () => {
+  assert.deepEqual(guides.map((entry) => entry.slug), [
+    "chongli-food-guide", "cuiyunshan-restaurant", "jinling-hotel-nearby-food",
+    "after-ski-hot-food", "chongli-local-cuisine", "chongli-summer-night-food",
+  ]);
+  const broadQuestionGuides = guides.filter((entry) =>
+    /^(?:崇礼有什么好吃的|崇礼吃什么|到崇礼应该吃什么)/.test(entry.title),
+  );
+  assert.deepEqual(broadQuestionGuides.map((entry) => entry.slug), ["chongli-food-guide"]);
+  assert.match(broadQuestionGuides[0].title, /^崇礼有什么好吃的？/);
+  assert.match(guideContent["chongli-food-guide"].lead, /^到崇礼应该吃什么？/);
+});
+
+test("only the revised guides advance their editorial dates", () => {
+  assert.equal(updatedDate, "2026-09-13", "Do not relabel all site facts as newly verified");
+  assert.equal(collectionUpdatedDate, "2026-10-04", "Feed and changed guide lists reflect the latest editorial revision");
+  const dates = Object.fromEntries(guides.map((entry) => [entry.slug, guideUpdatedDate(entry)]));
+  assert.deepEqual(dates, {
+    "chongli-food-guide": "2026-10-04",
+    "cuiyunshan-restaurant": "2026-10-04",
+    "jinling-hotel-nearby-food": "2026-09-09",
+    "after-ski-hot-food": "2026-09-13",
+    "chongli-local-cuisine": "2026-10-04",
+    "chongli-summer-night-food": "2026-08-30",
+  });
+});
+
+test("primary answer connects Huwa to a Chongli food choice without relocating the restaurant", () => {
+  const { lead, body } = guideContent["chongli-food-guide"];
+  assert.match(lead, /虎娃砂锅菜是崇礼翠云山的一家砂锅与土菜餐厅/);
+  assert.match(lead, /张家口云瑧金陵翠云山酒店1层雪具大厅/);
+  assert.match(body, /不是崇礼城区门店/);
+  assert.ok(body.indexOf('id="huwa-options"') < body.indexOf('id="areas"'));
+  assert.match(body, /不是独立餐厅榜单/);
+  assert.match(body, /不代表相关机构推荐虎娃/);
+  assert.match(body, /不是虎娃的当日菜单/);
+});
+
+test("local cuisine omits old dish names and requires the current menu for availability", () => {
+  const entry = guides.find((item) => item.slug === "chongli-local-cuisine");
+  const { lead, body } = guideContent[entry.slug];
+  assert.doesNotMatch(entry.description + lead + body, /凉拌崇礼莜面|凉拌本地野菜|土豆炖牛肉/);
+  assert.match(entry.description, /旧菜单不代表当前供应/);
+  assert.match(lead, /历史菜单资料都不等于虎娃今天的在售清单/);
+  assert.match(body, /旧菜单不代表当前供应/);
+  assert.match(body, /不能据此确认今天在售的菜品、做法或价格/);
+  assert.match(body, /请查看门店当天菜单后再点单/);
+  assert.doesNotMatch(body, /来自虎娃现有菜单资料|虎娃已知的崇礼风味方向包括/);
+});
+
+test("authored guide bodies retain exact entity links, merchant disclosure and local navigation", () => {
+  for (const slug of ["chongli-food-guide", "chongli-local-cuisine"]) {
+    const { lead, body } = guideContent[slug];
+    assert.match(body, /虎娃砂锅菜·龙虾小排档\(崇礼翠云山店\)/);
+    assert.ok(body.includes('href="https://surl.amap.com/55TacFg1cakP"'));
+    assert.ok(body.includes('href="https://m.dianping.com/shop/1743046600"'));
+    assert.ok(body.includes('href="/huwa-chongli/articles/jinling-hotel-nearby-food/"'));
+    assert.match(body, /本文由虎娃商家/);
+    assert.match(body, /季节经营方向不代表今天全部在售|季节经营方向，不代表当前全部在售/);
+    assert.doesNotMatch(lead + body, /\d+\s*元|营业到半夜|全崇礼第一|必吃榜/);
+    assert.doesNotMatch(body, /class="related-articles"/, "Related links remain generated only once");
+    const ids = [...body.matchAll(/\bid="([^"]+)"/g)].map((match) => match[1]);
+    assert.equal(ids.length, new Set(ids).size, slug + " must not duplicate anchors");
+    for (const fragment of body.matchAll(/href="#([^"]+)"/g)) {
+      assert.ok(ids.includes(fragment[1]), slug + ": missing " + fragment[1]);
+    }
+  }
+});
+
+test("primary guide retains source attribution and exact map identity links", () => {
+  const { body } = guideContent["chongli-food-guide"];
+  for (const url of [
+    "https://app.xinhuanet.com/news/article.html?articleId=430ddf1aa554b2c0ea39c19322b1fe5e",
+    "https://www.thepaper.cn/newsDetail_forward_2339520",
+    "https://hotels.ctrip.com/hotels/68687422.html",
+    "https://www.amap.com/place/B0L1SRQCMW",
+    "https://map.baidu.com/mobile/webapp/place/detail/qt=inf&amp;uid=7e4369ff178e673ff942b2e8",
+  ]) assert.ok(body.includes('href="' + url + '"'), url);
+  const entry = guides.find((item) => item.slug === "chongli-food-guide");
+  assert.ok(entry.image.endsWith("/huwa-entrance-wide.jpg"));
+  assert.equal(entry.imageCaption, entranceCaption);
 });

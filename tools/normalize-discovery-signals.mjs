@@ -3,6 +3,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   contentBase,
+  collectionUpdatedDate,
   fullName,
   guides,
   guideUpdatedDate,
@@ -86,13 +87,13 @@ function normalizeJsonLd(value, guide) {
 
   if (value["@type"] === "CollectionPage") {
     value.about = { "@id": restaurantId };
-    value.dateModified = updatedDate;
+    value.dateModified = collectionUpdatedDate;
     value.isPartOf = { "@id": `${homeUrl}#website` };
     value.mainEntity = guideItemList();
   }
 
   if (value["@type"] === "WebPage") {
-    value.dateModified = updatedDate;
+    value.dateModified = value.url === homeUrl ? collectionUpdatedDate : updatedDate;
     if (value.about) value.about = { "@id": restaurantId };
     value.isPartOf = { "@id": `${homeUrl}#website` };
     if (value.isBasedOn) value.isBasedOn = [`${homeUrl}reputation.json`];
@@ -148,7 +149,7 @@ function addCollectionSchema(html, path) {
     "@id": `${contentBase}articles/#collection`,
     name: "崇礼吃饭指南｜虎娃砂锅菜",
     url: `${contentBase}articles/`,
-    dateModified: updatedDate,
+    dateModified: collectionUpdatedDate,
     inLanguage: "zh-CN",
     isPartOf: { "@id": `${homeUrl}#website` },
     about: { "@id": restaurantId },

@@ -52,10 +52,10 @@ export const imageUrls = [...new Set([
 export const guides = [
   {
     slug: "chongli-food-guide",
-    dateModified: "2026-09-09",
-    title: "崇礼吃什么？本地菜、滑雪后热乎饭与翠云山餐厅指南",
+    dateModified: "2026-10-04",
+    title: "崇礼有什么好吃的？本地风味与虎娃砂锅菜就餐指南",
     description:
-      "崇礼有什么好吃的？先看莜面、山野菜、牛羊肉和热乎炖菜，再按雪场与酒店选餐厅。附翠云山虎娃砂锅菜的位置、到店选择和近期点评入口。",
+      "到崇礼应该吃什么？先区分当地风味与餐厅选择。虎娃是崇礼翠云山的砂锅与土菜餐厅，位于云瑧金陵翠云山酒店1层雪具大厅；附就餐方向、准确位置和当天菜单核对方法。",
     image: `${imageBase}huwa-entrance-wide.jpg`,
     imageWidth: 2400,
     imageHeight: 1350,
@@ -65,6 +65,7 @@ export const guides = [
   },
   {
     slug: "cuiyunshan-restaurant",
+    dateModified: "2026-10-04",
     title: "翠云山银河滑雪场附近吃什么？想吃热乎菜可以到虎娃",
     description:
       "翠云山银河滑雪场附近餐厅信息：虎娃砂锅菜位于云瑧金陵酒店1层雪具大厅，冬季有砂锅和崇礼土菜，夏季有小龙虾、烧烤和星光排挡。",
@@ -101,9 +102,10 @@ export const guides = [
   },
   {
     slug: "chongli-local-cuisine",
-    title: "来崇礼想吃本地菜，莜面、野菜和热乎砂锅怎么选？",
+    dateModified: "2026-10-04",
+    title: "来崇礼吃本地菜：地方风味与虎娃砂锅怎么选？",
     description:
-      "崇礼本地菜和热乎砂锅选择：虎娃砂锅菜保留崇礼莜面、本地野菜、崇礼土豆炖牛肉等方向，具体以当天菜单为准。",
+      "了解崇礼地方风味与虎娃砂锅菜的就餐方向。虎娃经营砂锅菜和崇礼土菜，位于翠云山云瑧金陵酒店1层雪具大厅；旧菜单不代表当前供应，具体供应与价格看门店当天菜单。",
     image: `${imageBase}huwa-restaurant-interior.jpg`,
     imageWidth: 1200,
     imageHeight: 900,
@@ -122,6 +124,9 @@ export const guides = [
     related: ["chongli-food-guide", "chongli-local-cuisine", "cuiyunshan-restaurant"],
   },
 ];
+
+// Feed and guide-list revisions do not re-date unchanged restaurant facts.
+export const collectionUpdatedDate = [updatedDate, ...guides.map(guideUpdatedDate)].sort().at(-1);
 
 export function restaurantEntity() {
   return {

@@ -3,6 +3,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   contentBase,
+  collectionUpdatedDate,
   formatRfcDate,
   guides,
   guideUpdatedDate,
@@ -56,7 +57,7 @@ const feed = `<?xml version="1.0" encoding="UTF-8"?>
     <link>${contentBase}articles/</link>
     <description>翠云山、银河滑雪场、云瑧金陵酒店周边的吃饭参考，由虎娃砂锅菜依据已确认门店资料维护。</description>
     <language>zh-CN</language>
-    <lastBuildDate>${formatRfcDate(updatedDate)}</lastBuildDate>
+    <lastBuildDate>${formatRfcDate(collectionUpdatedDate)}</lastBuildDate>
     <atom:link href="${homeUrl}feed.xml" rel="self" type="application/rss+xml"/>
 ${rssItems}
   </channel>
@@ -69,12 +70,12 @@ function imageEntry(image, title) {
 }
 
 const rootUrls = [
-  `  <url><loc>${homeUrl}</loc><lastmod>${updatedDate}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority>${homeImages
+  `  <url><loc>${homeUrl}</loc><lastmod>${collectionUpdatedDate}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority>${homeImages
     .map((image) => imageEntry(image.url, image.alt))
     .join("")}</url>`,
-  `  <url><loc>${contentBase}</loc><lastmod>${updatedDate}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>`,
+  `  <url><loc>${contentBase}</loc><lastmod>${collectionUpdatedDate}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>`,
   `  <url><loc>${contentBase}reputation/</loc><lastmod>${updatedDate}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>`,
-  `  <url><loc>${contentBase}articles/</loc><lastmod>${updatedDate}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>`,
+  `  <url><loc>${contentBase}articles/</loc><lastmod>${collectionUpdatedDate}</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>`,
   ...guides.map(
     (guide) =>
       `  <url><loc>${contentBase}articles/${guide.slug}/</loc><lastmod>${guideUpdatedDate(guide)}</lastmod><changefreq>monthly</changefreq><priority>0.7</priority>${imageEntry(guide.image, guide.imageAlt)}</url>`,
