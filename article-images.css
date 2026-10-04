@@ -240,3 +240,6 @@
     padding: 38px 24px;
   }
 }
+.article-hero h1 {
+  text-wrap: balance;
+}
