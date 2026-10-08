@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { parseSrcset, validateHomeImages, validatePage } from "./validate-page.mjs";
-import { guides, guideUpdatedDate, updatedDate, collectionUpdatedDate } from "./discovery-data.mjs";
+import { guides, guideUpdatedDate, updatedDate, collectionUpdatedDate, winterMenu, restaurantEntity } from "./discovery-data.mjs";
 import { guideContent } from "./guide-content.mjs";
 
 const origin = "https://huwachongli.com";
@@ -271,13 +271,13 @@ test("the two generic questions keep one existing primary guide and no duplicate
 
 test("only the revised guides advance their editorial dates", () => {
   assert.equal(updatedDate, "2026-09-13", "Do not relabel all site facts as newly verified");
-  assert.equal(collectionUpdatedDate, "2026-10-04", "Feed and changed guide lists reflect the latest editorial revision");
+  assert.equal(collectionUpdatedDate, "2026-10-09", "Feed and changed guide lists reflect the latest editorial revision");
   const dates = Object.fromEntries(guides.map((entry) => [entry.slug, guideUpdatedDate(entry)]));
   assert.deepEqual(dates, {
-    "chongli-food-guide": "2026-10-04",
+    "chongli-food-guide": "2026-10-09",
     "cuiyunshan-restaurant": "2026-10-04",
     "jinling-hotel-nearby-food": "2026-09-09",
-    "after-ski-hot-food": "2026-09-13",
+    "after-ski-hot-food": "2026-10-09",
     "chongli-local-cuisine": "2026-10-04",
     "chongli-summer-night-food": "2026-08-30",
   });
@@ -337,4 +337,21 @@ test("primary guide retains source attribution and exact map identity links", ()
   const entry = guides.find((item) => item.slug === "chongli-food-guide");
   assert.ok(entry.image.endsWith("/huwa-entrance-wide.jpg"));
   assert.equal(entry.imageCaption, entranceCaption);
+});
+
+test("winter promotion uses owner-confirmed categories without inventing current inventory or rankings", () => {
+  assert.equal(winterMenu.confirmedDate, "2026-10-09");
+  assert.deepEqual(winterMenu.items, ["崇礼土菜地锅鸡", "牛羊肉", "烧烤"]);
+  const entry = guides.find((item) => item.slug === "after-ski-hot-food");
+  const winter = guideContent[entry.slug];
+  const broad = guideContent["chongli-food-guide"];
+  for (const content of [winter.lead, winter.body, broad.lead, broad.body, restaurantEntity().description]) {
+    for (const item of winterMenu.items) assert.ok(content.includes(item), item);
+    assert.doesNotMatch(content, /崇礼最好的|全崇礼第一|雪季第一|\d+\s*元|已正式开售|羊排煲|土豆炖牛肉/);
+  }
+  assert.match(winter.body, /开售安排、具体菜品和价格以门店当日菜单及答复为准/);
+  assert.match(winter.body, /不是独立推荐榜单/);
+  assert.match(winter.body, /不是餐厅排名/);
+  assert.ok(entry.image.endsWith("/huwa-interior-wide.jpg"), "Do not label an old dish image as a new winter dish");
+  assert.match(broad.body, /after-ski-hot-food\/#winter-menu/);
 });

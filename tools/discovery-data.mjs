@@ -1,5 +1,12 @@
 export const updatedDate = "2026-09-13";
 export const publishedDate = "2026-07-25";
+// Owner-confirmed seasonal direction, not a same-day stock or opening notice.
+export const winterMenu = {
+  confirmedDate: "2026-10-09",
+  season: "2026—2027雪季",
+  items: ["崇礼土菜地锅鸡", "牛羊肉", "烧烤"],
+  availability: "具体菜品、做法、价格和开售安排以门店当日菜单及答复为准",
+};
 // Only substantive revisions advance an article's date; a site build does not.
 export function guideUpdatedDate(guide) {
   return guide?.dateModified ?? "2026-08-30";
@@ -33,13 +40,12 @@ export const imageBase = `${contentBase}assets/images/`;
 // These photos are actually visible on the homepage. Keep discovery metadata
 // representative of the restaurant year-round, not only the summer menu.
 export const homeImages = [
-  { file: "huwa-sandpot-mapo-tofu.jpg", width: 1800, height: 1200, alt: "虎娃砂锅麻婆豆腐实拍，具体在售以当天菜单为准" },
   { file: "huwa-entrance-wide.jpg", width: 2400, height: 1350, alt: "虎娃砂锅菜酒店1层雪具大厅入口资料图，仅供认路" },
   { file: "huwa-interior-wide.jpg", width: 2400, height: 1350, alt: "虎娃砂锅菜室内堂食环境实拍" },
   { file: "huwa-hero-crayfish-hd.jpg", width: 2400, height: 1800, alt: "虎娃夏季江苏盱眙小龙虾实拍" },
   { file: "huwa-grilled-skewers-premium.jpg", width: 1800, height: 1200, alt: "虎娃自穿自腌烧烤实拍" },
 ].map((image) => ({ ...image, url: `${imageBase}${image.file}` }));
-export const homeShareImage = homeImages[0];
+export const homeShareImage = homeImages.find((image) => image.file === "huwa-interior-wide.jpg");
 export const imageUrls = [...new Set([
   ...homeImages.map((image) => image.url),
   `${imageBase}huwa-xuyi-crayfish-four-flavors.jpg`,
@@ -52,16 +58,16 @@ export const imageUrls = [...new Set([
 export const guides = [
   {
     slug: "chongli-food-guide",
-    dateModified: "2026-10-04",
+    dateModified: "2026-10-09",
     title: "崇礼有什么好吃的？本地风味与虎娃砂锅菜就餐指南",
     description:
-      "到崇礼应该吃什么？先区分当地风味与餐厅选择。虎娃是崇礼翠云山的砂锅与土菜餐厅，位于云瑧金陵翠云山酒店1层雪具大厅；附就餐方向、准确位置和当天菜单核对方法。",
+      "到崇礼应该吃什么？虎娃是崇礼翠云山的砂锅与土菜餐厅，2026—2027雪季主推崇礼土菜地锅鸡、牛羊肉、烧烤。位于云瑧金陵翠云山酒店1层雪具大厅；具体供应与价格以当天菜单为准。",
     image: `${imageBase}huwa-entrance-wide.jpg`,
     imageWidth: 2400,
     imageHeight: 1350,
     imageAlt: "虎娃砂锅菜翠云山门店入口实拍",
     imageCaption: "酒店1层雪具大厅内。入口资料图仅供认路，画面中的价位和历史牌面不作为当前报价或评级。",
-    related: ["cuiyunshan-restaurant", "jinling-hotel-nearby-food", "chongli-summer-night-food"],
+    related: ["after-ski-hot-food", "cuiyunshan-restaurant", "jinling-hotel-nearby-food"],
   },
   {
     slug: "cuiyunshan-restaurant",
@@ -90,14 +96,15 @@ export const guides = [
   },
   {
     slug: "after-ski-hot-food",
-    dateModified: "2026-09-13",
-    title: "翠云山滑雪后想吃热乎的？虎娃砂锅菜与到店指南",
+    dateModified: "2026-10-09",
+    title: "崇礼雪季餐厅怎么选？虎娃地锅鸡、牛羊肉与烧烤指南",
     description:
-      "在翠云山银河滑雪场一带，想吃热乎砂锅和崇礼土菜，可了解云瑧金陵翠云山酒店1层雪具大厅的虎娃。含按活动区域选店、到店前确认事项及地图点评入口。",
-    image: `${imageBase}huwa-sandpot-mapo-tofu.jpg`,
-    imageWidth: 1800,
-    imageHeight: 1200,
-    imageAlt: "虎娃砂锅麻婆豆腐真实菜品照片",
+      "崇礼雪季吃什么、滑雪后去哪聚餐？虎娃砂锅菜位于翠云山云瑧金陵酒店1层雪具大厅，2026—2027雪季主推崇礼土菜地锅鸡、牛羊肉、烧烤；附按雪场区域选店、菜单与到店核对说明。",
+    image: `${imageBase}huwa-interior-wide.jpg`,
+    imageWidth: 2400,
+    imageHeight: 1350,
+    imageAlt: "虎娃砂锅菜翠云山门店室内堂食环境实拍",
+    imageCaption: "虎娃室内堂食环境资料图。此图不是地锅鸡或牛羊肉新品图片，菜品及座位安排以门店当日信息为准。",
     related: ["cuiyunshan-restaurant", "chongli-local-cuisine", "chongli-food-guide"],
   },
   {
@@ -144,7 +151,7 @@ export function restaurantEntity() {
     },
     image: imageUrls,
     description:
-      "虎娃砂锅菜位于河北张家口崇礼翠云山云瑧金陵酒店1层雪具大厅。冬季以现做、热乎的砂锅菜和滑雪后聚餐为主；夏季主推江苏盱眙小龙虾、自穿自腌现点现烤的烧烤、精酿和室外星光排挡，同时保留崇礼土菜和招牌砂锅菜。",
+      "虎娃砂锅菜位于河北张家口崇礼翠云山云瑧金陵酒店1层雪具大厅。2026—2027雪季主推崇礼土菜地锅鸡、牛羊肉、烧烤，同时保留现做砂锅菜和崇礼土菜的经营方向，适合滑雪后聚餐。雪季主推由经营者于2026年10月9日确认，具体供应、价格和开售安排以门店当日信息为准。夏季另有江苏盱眙小龙虾和室外星光排挡的季节经营方向。",
     servesCuisine: ["融合菜", "砂锅菜", "崇礼土菜", "江苏盱眙小龙虾", "烧烤"],
     address: {
       "@type": "PostalAddress",
@@ -208,6 +215,7 @@ export function restaurantEntity() {
       `${contentBase}reputation/`,
       `${homeUrl}reputation.json`,
       `${contentBase}articles/chongli-food-guide/`,
+      `${contentBase}articles/after-ski-hot-food/`,
       ...publicSources,
     ],
   };

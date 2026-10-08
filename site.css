@@ -236,6 +236,25 @@ body.site-home {
   line-height: 1.95;
 }
 
+.hero-lead strong {
+  color: #fff8ed;
+  font-weight: 700;
+}
+
+.hero-note {
+  max-width: 650px;
+  margin: 16px 0 0;
+  color: rgba(255, 245, 230, 0.68);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.hero-location-link {
+  padding: 10px 0;
+  color: var(--brass-soft);
+  font-size: 13px;
+}
+
 .hero-actions {
   display: flex;
   margin-top: 38px;
@@ -427,7 +446,7 @@ body.site-home {
 .season-showcase {
   display: grid;
   margin-top: 70px;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.9fr);
   gap: 2px;
 }
 
@@ -496,6 +515,21 @@ body.site-home {
   color: rgba(255, 248, 237, 0.72);
   font-size: 15px;
   line-height: 1.85;
+}
+
+.season-panel__copy .season-photo-note {
+  margin-top: 14px;
+  color: rgba(255, 248, 237, 0.62);
+  font-size: 12px;
+  line-height: 1.75;
+}
+
+.season-panel--winter::after {
+  background: linear-gradient(180deg, rgba(12, 8, 6, 0.12), rgba(12, 8, 6, 0.96));
+}
+
+.season-panel--summer h3 {
+  font-size: clamp(32px, 3.2vw, 50px);
 }
 
 .photo-essay {

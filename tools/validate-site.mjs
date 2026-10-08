@@ -314,10 +314,10 @@ const expectedStructuredFaq = visibleFaq.map((item) => ({
 if (
   embeddedFaqPageCount !== 1 ||
   embeddedFaqPage?.["@id"] !== "https://huwachongli.com/#faq" ||
-  visibleFaq.length !== 6 ||
+  visibleFaq.length !== 7 ||
   JSON.stringify(structuredFaq) !== JSON.stringify(expectedStructuredFaq)
 ) {
-  errors.push("root homepage FAQPage does not exactly match the six visible FAQs");
+  errors.push("root homepage FAQPage does not exactly match the seven visible FAQs");
 }
 
 const reputation = JSON.parse(rootReputation);
