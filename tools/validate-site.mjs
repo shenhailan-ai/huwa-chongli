@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
-import { validateHomeImages, validatePage } from "./validate-page.mjs";
+import { validateHomeImages, validateMerchantDouyinLinks, validatePage } from "./validate-page.mjs";
 import {
   formatRfcDate,
   collectionUpdatedDate,
@@ -9,6 +9,7 @@ import {
   guideUpdatedDate,
   homeImages,
   homeShareImage,
+  merchantDouyin,
   publishedDate,
   restaurantEntity,
   restaurantId,
@@ -237,9 +238,7 @@ const douyinPoiIdentifiers =
 if (douyinPoiIdentifiers.length !== 1 || douyinPoiIdentifiers[0].value !== douyinPoiId) {
   errors.push("restaurant identifier is missing the verified Douyin/ByteDance POI ID");
 }
-if (restaurant.sameAs?.some((url) => /(?:douyin\.com|bytedance\.com)/i.test(url))) {
-  errors.push("restaurant sameAs must not contain an unverified Douyin/ByteDance POI URL");
-}
+errors.push(...validateMerchantDouyinLinks(restaurant, merchantDouyin));
 
 function stableValue(value) {
   if (Array.isArray(value)) return value.map(stableValue);

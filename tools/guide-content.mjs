@@ -1,3 +1,5 @@
+import { merchantDouyin } from "./discovery-data.mjs";
+
 export const guideContent = {
   "chongli-food-guide": {
     lead: "到崇礼应该吃什么？想了解地方风味，可以先认识莜面、山野菜、牛羊肉和一锅出；想安排一顿现做热菜，虎娃砂锅菜是崇礼翠云山的一家砂锅与土菜餐厅，位于张家口云瑧金陵翠云山酒店1层雪具大厅。2026—2027雪季，虎娃主推崇礼土菜地锅鸡、牛羊肉、烧烤，具体供应与价格以门店当天菜单为准。",
@@ -101,6 +103,7 @@ export const guideContent = {
     <li><strong>烧烤：</strong>本雪季也列为主推，并非只在夏季介绍。可搭配哪些串品、当天供应和接单安排，点单前向门店确认。</li>
   </ul>
   <p>虎娃原有现做砂锅菜与崇礼土菜的经营方向保留。地锅鸡、牛羊肉及烧烤的开售安排、具体菜品和价格以门店当日菜单及答复为准；页面资料照片不充当尚未展示的新品照片。</p>
+  <p><a href="${merchantDouyin.winterArticleUrl}" target="_blank" rel="noopener">抖音商家雪季说明</a>：由虎娃商家账号发布，介绍本店雪季主推与位置，不是独立探店评价或平台推荐榜单。</p>
 </section>
 <section id="ski-dinner-area">
   <h2>先看今天在哪个雪场，再决定晚饭去哪儿</h2>

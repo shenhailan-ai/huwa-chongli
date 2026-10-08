@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { parseSrcset, validateHomeImages, validatePage } from "./validate-page.mjs";
-import { guides, guideUpdatedDate, updatedDate, collectionUpdatedDate, winterMenu, restaurantEntity } from "./discovery-data.mjs";
+import { parseSrcset, validateHomeImages, validateMerchantDouyinLinks, validatePage } from "./validate-page.mjs";
+import { guides, guideUpdatedDate, updatedDate, collectionUpdatedDate, winterMenu, merchantDouyin, publicSources, restaurantEntity } from "./discovery-data.mjs";
 import { guideContent } from "./guide-content.mjs";
 
 const origin = "https://huwachongli.com";
@@ -354,4 +354,43 @@ test("winter promotion uses owner-confirmed categories without inventing current
   assert.match(winter.body, /不是餐厅排名/);
   assert.ok(entry.image.endsWith("/huwa-interior-wide.jpg"), "Do not label an old dish image as a new winter dish");
   assert.match(broad.body, /after-ski-hot-food\/#winter-menu/);
+});
+
+test("verified Douyin profile and merchant winter article have distinct entity roles", () => {
+  const restaurant = restaurantEntity();
+  assert.deepEqual(validateMerchantDouyinLinks(restaurant, merchantDouyin), []);
+  assert.equal(restaurant.sameAs.filter((url) => url === merchantDouyin.profileUrl).length, 1);
+  assert.equal(restaurant.subjectOf.filter((url) => url === merchantDouyin.winterArticleUrl).length, 1);
+  assert.ok(!restaurant.sameAs.includes(merchantDouyin.winterArticleUrl));
+  assert.ok(!publicSources.includes(merchantDouyin.winterArticleUrl), "Merchant content is not an independent public source");
+  const body = guideContent["after-ski-hot-food"].body;
+  assert.ok(body.includes(`href="${merchantDouyin.winterArticleUrl}" target="_blank" rel="noopener">抖音商家雪季说明</a>`));
+  assert.match(body, /由虎娃商家账号发布.*不是独立探店评价或平台推荐榜单/);
+});
+
+test("Douyin sameAs allowlist never admits an entire platform or arbitrary profile", () => {
+  for (const url of [
+    "https://www.douyin.com/",
+    "https://www.douyin.com/user/unverified",
+    "https://www.douyin.com/poi/7434035410461788201",
+    merchantDouyin.winterArticleUrl,
+    "https://www.douyin.com/note/7690223378061348131",
+    "https://www.bytedance.com/",
+    merchantDouyin.profileUrl + "?unverified=1",
+    merchantDouyin.profileUrl.replace("https://", "http://"),
+    merchantDouyin.profileUrl.replace("www.douyin.com", "www.douyin.com.example.com"),
+  ]) {
+    const restaurant = restaurantEntity();
+    restaurant.sameAs.push(url);
+    hasError(validateMerchantDouyinLinks(restaurant, merchantDouyin), /unverified Douyin\/ByteDance URL or an article/);
+  }
+});
+
+test("missing or misclassified verified Douyin links fail validation", () => {
+  const restaurant = restaurantEntity();
+  restaurant.sameAs = restaurant.sameAs.filter((url) => url !== merchantDouyin.profileUrl);
+  restaurant.subjectOf = restaurant.subjectOf.filter((url) => url !== merchantDouyin.winterArticleUrl);
+  const errors = validateMerchantDouyinLinks(restaurant, merchantDouyin);
+  hasError(errors, /missing the verified Douyin merchant profile/);
+  hasError(errors, /missing the verified merchant winter article/);
 });

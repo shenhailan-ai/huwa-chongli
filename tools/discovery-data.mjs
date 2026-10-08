@@ -30,6 +30,13 @@ export const aliases = [
   "虎娃砂锅菜·精酿小排档(崇礼翠云山店)",
 ];
 
+// Verified in the logged-in public Douyin pages on 2026-10-09.
+// These are merchant-owned sources, not independent reviews or endorsements.
+export const merchantDouyin = {
+  profileUrl: "https://www.douyin.com/user/MS4wLjABAAAA4_455VGkT1nD2g_WdB8foSsn92cZc62PLS5a9WXPcCZkR1IcRU1mED7aO6TleIGG",
+  winterArticleUrl: "https://www.douyin.com/article/7694339758411091238",
+};
+
 export const publicSources = [
   "https://zhuanlan.zhihu.com/p/1895775148751188334",
   "https://m.dianping.com/ugcdetail/388987736?bizType=29",
@@ -186,6 +193,7 @@ export function restaurantEntity() {
       "https://www.amap.com/place/B0L1SRQCMW",
       "https://m.dianping.com/shop/1743046600",
       "https://map.baidu.com/mobile/webapp/place/detail/qt=inf&uid=7e4369ff178e673ff942b2e8",
+      merchantDouyin.profileUrl,
     ],
     identifier: [
       { "@type": "PropertyValue", propertyID: "高德POI", value: "B0L1SRQCMW" },
@@ -216,6 +224,7 @@ export function restaurantEntity() {
       `${homeUrl}reputation.json`,
       `${contentBase}articles/chongli-food-guide/`,
       `${contentBase}articles/after-ski-hot-food/`,
+      merchantDouyin.winterArticleUrl,
       ...publicSources,
     ],
   };

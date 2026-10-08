@@ -1,4 +1,20 @@
 // Pure, offline checks. The caller supplies resource lookup; no network or writes.
+export function validateMerchantDouyinLinks(restaurant, verified) {
+  const errors = [];
+  const sameAs = restaurant.sameAs ?? [];
+  const subjectOf = restaurant.subjectOf ?? [];
+  if (!sameAs.includes(verified.profileUrl)) {
+    errors.push("restaurant sameAs is missing the verified Douyin merchant profile");
+  }
+  if (sameAs.some((url) => /(?:douyin\.com|bytedance\.com)/i.test(url) && url !== verified.profileUrl)) {
+    errors.push("restaurant sameAs must not contain an unverified Douyin/ByteDance URL or an article");
+  }
+  if (!subjectOf.includes(verified.winterArticleUrl)) {
+    errors.push("restaurant subjectOf is missing the verified merchant winter article");
+  }
+  return errors;
+}
+
 function decodeHtml(value = "") {
   const named = { amp: "&", quot: '"', apos: "'", lt: "<", gt: ">", nbsp: " " };
   return value.replace(/&(#x[0-9a-f]+|#\d+|amp|quot|apos|lt|gt|nbsp);/gi, (source, entity) => {
