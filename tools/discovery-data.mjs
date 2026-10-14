@@ -90,10 +90,10 @@ export const guides = [
   },
   {
     slug: "jinling-hotel-nearby-food",
-    dateModified: "2026-09-09",
+    dateModified: "2026-10-15",
     title: "崇礼翠云山云瑧金陵酒店附近吃什么？一层虎娃砂锅菜与晚饭指南",
     description:
-      "住张家口云瑧金陵翠云山酒店，晚饭可到1层雪具大厅的虎娃砂锅菜。这里整理准确位置、找店步骤、冬夏吃法及高德、大众点评、百度地图入口。",
+      "住张家口云瑧金陵翠云山酒店，晚饭可到1层雪具大厅的虎娃砂锅菜。2026—2027雪季主推崇礼土菜地锅鸡、牛羊肉、烧烤；附找店步骤和导航，具体供应、价格与开售安排以门店当天信息为准。",
     image: `${imageBase}huwa-entrance-wide.jpg`,
     imageWidth: 2400,
     imageHeight: 1350,

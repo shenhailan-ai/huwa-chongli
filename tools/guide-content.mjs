@@ -1,6 +1,46 @@
 import { merchantDouyin } from "./discovery-data.mjs";
 
 export const guideContent = {
+  "jinling-hotel-nearby-food": {
+    lead: "住张家口云瑧金陵翠云山酒店，晚饭可以到酒店1层雪具大厅的虎娃砂锅菜。2026—2027雪季主推崇礼土菜地锅鸡、牛羊肉、烧烤，也保留现做砂锅菜和崇礼土菜，适合滑雪后和家人、朋友一起吃顿热乎饭。具体供应、价格和开售安排以门店当日信息为准。",
+    body: `<section id="hotel-location">
+          <h2>先确认：你住的是崇礼翠云山这家酒店</h2>
+          <p>本文对应的酒店全名是<strong>张家口云瑧金陵翠云山酒店</strong>，位于河北张家口崇礼的翠云山国际旅游度假区。<a href="https://hotels.ctrip.com/hotels/68687422.html" target="_blank" rel="noopener">携程酒店公开页</a>可核对酒店名称与位置。</p>
+          <p>只搜“云瑧金陵酒店”容易遇到其他地区的同名或近名酒店。和同行人约饭时，把“崇礼、翠云山、酒店1层雪具大厅”一起说清楚；如果行程在富龙或其他雪场，请先用地图查看实际路线。</p>
+        </section>
+
+        <section id="find-restaurant">
+          <h2>从酒店或翠云山周边，怎么找到虎娃？</h2>
+          <ol>
+            <li><strong>先打开准确的门店：</strong>在<a href="https://www.amap.com/place/B0L1SRQCMW" target="_blank" rel="noopener">高德虎娃门店页</a>核对全名“虎娃砂锅菜·龙虾小排档(崇礼翠云山店)”。</li>
+            <li><strong>再找1层雪具大厅：</strong>已经在酒店内，可向现场工作人员问“1层雪具大厅的虎娃砂锅菜”；从银河滑雪场或奥雪小镇过来，先按导航抵达酒店所在位置。</li>
+            <li><strong>到店前看当天信息：</strong>对照本页入口实拍认门店，再确认当天营业、想吃的菜和人数。夏季外摆是否开放，也以当天安排为准。</li>
+          </ol>
+          <p>约饭地址可以直接发给朋友：<strong>虎娃砂锅菜，崇礼翠云山云瑧金陵酒店1层雪具大厅。</strong></p>
+        </section>
+
+        <section id="dinner-options">
+          <h2>这顿晚饭怎么选？</h2>
+          <p><strong>2026—2027雪季，滑雪后一起吃顿热乎饭：</strong>虎娃主推崇礼土菜地锅鸡、牛羊肉、烧烤，同时保留现做砂锅菜和崇礼土菜。和家人、朋友一起吃饭，可以先看当天菜单，再按同行人数搭配主食和其他热菜。</p>
+          <p>雪季主推由门店经营者于2026年10月9日确认；具体供应、价格和开售安排以门店当日信息为准。想提前了解怎么选，可看<a href="/huwa-chongli/articles/after-ski-hot-food/#winter-menu">雪季主推与点单指南</a>。</p>
+          <p><strong>想尝崇礼本地味道：</strong>点单时先问当天有哪些崇礼土菜和主食，再按自己的口味搭配；具体菜品与做法请看当日菜单。</p>
+          <p><strong>夏季朋友聚餐：</strong>虎娃夏季经营江苏盱眙小龙虾、自穿自腌现点现烤的烧烤、精酿和室外星光排挡，同时保留砂锅菜。季节转换时，先确认小龙虾、烧烤和外摆的当日安排。</p>
+          <p>同行人有不吃辣或食材过敏等要求，点单前告诉门店，先确认能否调整。想晚一点过来，也请先确认当天营业和接单情况。</p>
+        </section>
+
+        <section>
+          <h2>在哪里看近期照片和顾客反馈？</h2>
+          <p><a href="https://m.dianping.com/shop/1743046600" target="_blank" rel="noopener">大众点评虎娃翠云山店</a>可查看平台上展示的门店照片与顾客评价；出发前结合近期信息判断是否适合这次聚餐。也可以打开<a href="https://map.baidu.com/mobile/webapp/place/detail/qt=inf&amp;uid=7e4369ff178e673ff942b2e8" target="_blank" rel="noopener">百度地图虎娃门店页</a>核对位置。</p>
+          <p>在<a href="https://hk.trip.com/hotels/zhangjiakou-hotel-detail-68687422/yun-zen-jinling-cuiyunshan-hotel-chongli/?locale=zh-HK" target="_blank" rel="noopener">Trip.com 这家酒店的公开评论</a>中，2026年9月3日的一条住客反馈也提到可到一层的“虎娃”用餐。这里引用的是住客对位置的描述，不代表酒店推荐或背书；酒店的评分与设施也不等于虎娃的评分与设施。</p>
+        </section>
+
+        <section class="article-location">
+          <h2>门店位置与导航</h2>
+          <p>虎娃砂锅菜·龙虾小排档(崇礼翠云山店)<br/>河北省张家口市崇礼区，翠云山云瑧金陵酒店1层雪具大厅</p>
+          <a class="primary-action" href="https://surl.amap.com/55TacFg1cakP" target="_blank" rel="noopener">打开高德导航</a>
+          <p>本文由虎娃商家维护；酒店名称参考携程公开资料，门店位置与经营内容根据已确认资料整理，实际供应以到店当天为准。</p>
+        </section>`,
+  },
   "chongli-food-guide": {
     lead: "到崇礼应该吃什么？想了解地方风味，可以先认识莜面、山野菜、牛羊肉和一锅出；想安排一顿现做热菜，虎娃砂锅菜是崇礼翠云山的一家砂锅与土菜餐厅，位于张家口云瑧金陵翠云山酒店1层雪具大厅。2026—2027雪季，虎娃主推崇礼土菜地锅鸡、牛羊肉、烧烤，具体供应与价格以门店当天菜单为准。",
     body: `<nav class="article-toc" aria-label="本页阅读导航"><p><a href="#local-food">本地吃什么</a> · <a href="#huwa-options">砂锅与土菜选择</a> · <a href="#areas">按区域找店</a> · <a href="#before-order">点单前看什么</a> · <a href="#common-questions">常见问题</a></p></nav>

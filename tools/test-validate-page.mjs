@@ -271,12 +271,12 @@ test("the two generic questions keep one existing primary guide and no duplicate
 
 test("only the revised guides advance their editorial dates", () => {
   assert.equal(updatedDate, "2026-09-13", "Do not relabel all site facts as newly verified");
-  assert.equal(collectionUpdatedDate, "2026-10-09", "Feed and changed guide lists reflect the latest editorial revision");
+  assert.equal(collectionUpdatedDate, "2026-10-15", "Feed and changed guide lists reflect the latest editorial revision");
   const dates = Object.fromEntries(guides.map((entry) => [entry.slug, guideUpdatedDate(entry)]));
   assert.deepEqual(dates, {
     "chongli-food-guide": "2026-10-09",
     "cuiyunshan-restaurant": "2026-10-04",
-    "jinling-hotel-nearby-food": "2026-09-09",
+    "jinling-hotel-nearby-food": "2026-10-15",
     "after-ski-hot-food": "2026-10-09",
     "chongli-local-cuisine": "2026-10-04",
     "chongli-summer-night-food": "2026-08-30",
