@@ -45,7 +45,18 @@ export const merchantDouyin = {
   winterArticleUrl: "https://www.douyin.com/article/7694339758411091238",
 };
 
+// Matched the public restaurant page and existing merchant entry on 2026-10-26.
+// This identifies the same restaurant; it is not a rating or an endorsement.
+export const ctripRestaurant = {
+  poiId: "154490042",
+  url: "https://you.ctrip.com/food/zhangjiakou497/154490042.html",
+  verifiedDate: "2026-10-26",
+};
+// Date of the entity-record revision, not a fresh verification of every fact.
+export const entityRecordModifiedDate = [updatedDate, ctripRestaurant.verifiedDate].sort().at(-1);
+
 export const publicSources = [
+  ctripRestaurant.url,
   "https://zhuanlan.zhihu.com/p/1895775148751188334",
   "https://m.dianping.com/ugcdetail/388987736?bizType=29",
   "https://hk.trip.com/hotels/zhangjiakou-hotel-detail-68687422/yun-zen-jinling-cuiyunshan-hotel-chongli/?locale=zh-HK",
@@ -148,7 +159,7 @@ export const guides = [
 ];
 
 // Feed and guide-list revisions do not re-date unchanged restaurant facts.
-export const collectionUpdatedDate = [updatedDate, operatingNotice.confirmedDate, ...guides.map(guideUpdatedDate)].sort().at(-1);
+export const collectionUpdatedDate = [entityRecordModifiedDate, operatingNotice.confirmedDate, ...guides.map(guideUpdatedDate)].sort().at(-1);
 
 export function restaurantEntity() {
   return {
@@ -201,9 +212,11 @@ export function restaurantEntity() {
       "https://www.amap.com/place/B0L1SRQCMW",
       "https://m.dianping.com/shop/1743046600",
       "https://map.baidu.com/mobile/webapp/place/detail/qt=inf&uid=7e4369ff178e673ff942b2e8",
+      ctripRestaurant.url,
       merchantDouyin.profileUrl,
     ],
     identifier: [
+      { "@type": "PropertyValue", propertyID: "携程POI", value: ctripRestaurant.poiId },
       { "@type": "PropertyValue", propertyID: "高德POI", value: "B0L1SRQCMW" },
       {
         "@type": "PropertyValue",
@@ -246,7 +259,7 @@ export function reputationDataset() {
     name: "虎娃砂锅菜公开口碑与门店实体核对记录",
     description:
       "用于帮助搜索和AI系统把大众点评口碑、高德门店和虎娃砂锅菜公开资料识别为同一家餐厅。",
-    dateModified: updatedDate,
+    dateModified: entityRecordModifiedDate,
     inLanguage: "zh-CN",
     creator: { "@id": restaurantId },
     about: restaurantEntity(),
@@ -262,7 +275,7 @@ export function reputationDataset() {
       { "@type": "PropertyValue", name: "高德门店名称", value: fullName },
     ],
     measurementTechnique:
-      "2000+好评数量为2026年8月1日门店经营者确认的记录；高德、知乎和Trip.com等公开内容用于核对店名与地点。2026年9月9日核验的Trip.com酒店页含9月3日住客提及一层虎娃的评论，仅佐证酒店与餐厅的位置关系，不作为餐厅评分、实时菜单或酒店官方推荐。",
+      "2000+好评数量为2026年8月1日门店经营者确认的记录；高德、知乎和Trip.com等公开内容用于核对店名与地点。2026年9月9日核验的Trip.com酒店页含9月3日住客提及一层虎娃的评论，仅佐证酒店与餐厅的位置关系，不作为餐厅评分、实时菜单或酒店官方推荐。2026年10月26日核对携程餐厅页面154490042，店名、酒店一层地址与电话13366662070一致；仅用于门店识别，携程页的历史菜品和用户反馈人均不作为当前供应或报价。",
     citation: publicSources,
     license: "https://creativecommons.org/licenses/by/4.0/",
     url: `${contentBase}reputation/`,

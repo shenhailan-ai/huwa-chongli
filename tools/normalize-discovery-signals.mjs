@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 import {
   contentBase,
   collectionUpdatedDate,
+  entityRecordModifiedDate,
   fullName,
   guides,
   guideUpdatedDate,
@@ -94,7 +95,8 @@ function normalizeJsonLd(value, guide) {
   }
 
   if (value["@type"] === "WebPage") {
-    value.dateModified = value.url === homeUrl ? collectionUpdatedDate : updatedDate;
+    value.dateModified = value.url === homeUrl ? collectionUpdatedDate
+      : value["@id"] === `${contentBase}reputation/#webpage` ? entityRecordModifiedDate : updatedDate;
     if (value.about) value.about = { "@id": restaurantId };
     value.isPartOf = { "@id": `${homeUrl}#website` };
     if (value.isBasedOn) value.isBasedOn = [`${homeUrl}reputation.json`];
@@ -102,7 +104,7 @@ function normalizeJsonLd(value, guide) {
 
   if (value["@type"] === "Dataset") {
     value["@id"] = `${homeUrl}reputation.json#dataset`;
-    value.dateModified = updatedDate;
+    value.dateModified = entityRecordModifiedDate;
     value.creator = { "@id": restaurantId };
     value.about = restaurantEntity();
   }

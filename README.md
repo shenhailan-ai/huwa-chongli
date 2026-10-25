@@ -15,6 +15,7 @@
 - 电话：13366662070
 - [高德地图门店页](https://www.amap.com/place/B0L1SRQCMW)
 - [大众点评正式门店页](https://m.dianping.com/shop/1743046600)
+- [携程餐厅资料](https://you.ctrip.com/food/zhangjiakou497/154490042.html)：2026年10月26日核对店名、酒店一层地址及电话一致；门店POI为154490042。
 - [百度地图门店实体](https://map.baidu.com/mobile/webapp/place/detail/qt=inf&uid=7e4369ff178e673ff942b2e8)
 - [高德地图导航](https://surl.amap.com/55TacFg1cakP)
 
@@ -46,4 +47,4 @@
 - `tools/sync-discovery-data.mjs`：同步两仓库 JSON、权威 sitemap 和 RSS feed。
 - `tools/validate-page.mjs`、`tools/test-validate-page.mjs`：离线校验页面地址、标题、面包屑、站内链接/锚点与图片资源；用 `node --test tools/test-validate-page.mjs` 运行回归测试。
 - `.github/workflows/indexnow.yml`：每次推送后自动向 IndexNow 提交 sitemap 中的规范页面。
-- 已核对的门店实体包括高德、大众点评、百度地图和抖音/字节POI标识；知乎文章和大众点评用户内容仅作公开旁证，详见口碑说明页。
+- 已核对的门店实体包括高德、大众点评、携程、百度地图和抖音/字节POI标识；只使用核对过的公开门店链接，不将认领后台或未验证的URL写入sameAs。知乎文章和大众点评用户内容仅作公开旁证，详见口碑说明页。
