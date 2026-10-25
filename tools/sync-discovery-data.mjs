@@ -9,6 +9,7 @@ import {
   guideUpdatedDate,
   homeUrl,
   homeImages,
+  operatingNotice,
   publishedDate,
   reputationDataset,
   restaurantEntity,
@@ -35,6 +36,11 @@ const reputation = reputationDataset();
 for (const root of [repoRoot, rootSite]) {
   await writeFile(join(root, "restaurant.json"), prettyJson(restaurant));
   await writeFile(join(root, "reputation.json"), prettyJson(reputation));
+  const llmsPath = join(root, "llms.txt");
+  const llms = await readFile(llmsPath, "utf8");
+  const notice = `<!-- operating-notice:start -->\n## ${operatingNotice.title}\n\n- ${operatingNotice.text}\n- 电话：${operatingNotice.telephone}\n- 经营者确认日期：${operatingNotice.confirmedDate}。每日营业时间尚未公布，不从雪场开放时间推断餐厅营业时段。\n<!-- operating-notice:end -->\n\n`;
+  const cleaned = llms.replace(/<!-- operating-notice:start -->[\s\S]*?<!-- operating-notice:end -->\s*/g, "");
+  await writeFile(llmsPath, cleaned.replace("## 2026—2027雪季主推", `${notice}## 2026—2027雪季主推`));
 }
 
 const rssItems = guides

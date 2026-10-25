@@ -1,5 +1,13 @@
 export const updatedDate = "2026-09-13";
 export const publishedDate = "2026-07-25";
+// Owner confirmed on 2026-10-26. This is a conditional reopening estimate,
+// not a fixed opening date or a daily opening-hours schedule.
+export const operatingNotice = {
+  confirmedDate: "2026-10-26",
+  title: "雪季营业安排",
+  text: "虎娃砂锅菜目前暂停营业，预计11月初，随雪场开放恢复营业。具体开门日期请提前电话确认。",
+  telephone: "13366662070",
+};
 // Owner-confirmed seasonal direction, not a same-day stock or opening notice.
 export const winterMenu = {
   confirmedDate: "2026-10-09",
@@ -140,7 +148,7 @@ export const guides = [
 ];
 
 // Feed and guide-list revisions do not re-date unchanged restaurant facts.
-export const collectionUpdatedDate = [updatedDate, ...guides.map(guideUpdatedDate)].sort().at(-1);
+export const collectionUpdatedDate = [updatedDate, operatingNotice.confirmedDate, ...guides.map(guideUpdatedDate)].sort().at(-1);
 
 export function restaurantEntity() {
   return {
@@ -158,7 +166,7 @@ export function restaurantEntity() {
     },
     image: imageUrls,
     description:
-      "虎娃砂锅菜位于河北张家口崇礼翠云山云瑧金陵酒店1层雪具大厅。2026—2027雪季主题是“来崇礼滑雪，吃一桌地道的崇礼土菜”，围绕崇礼土菜、牛羊肉和现炒现做的砂锅菜安排滑雪后聚餐。雪季主推崇礼土菜地锅鸡、牛羊肉、烧烤，由经营者于2026年10月9日确认；具体供应、价格和开售安排以门店当日信息为准。夏季另有江苏盱眙小龙虾和室外星光排挡。",
+      `${operatingNotice.text}虎娃砂锅菜位于河北张家口崇礼翠云山云瑧金陵酒店1层雪具大厅。2026—2027雪季主题是“来崇礼滑雪，吃一桌地道的崇礼土菜”，围绕崇礼土菜、牛羊肉和现炒现做的砂锅菜安排滑雪后聚餐。雪季主推崇礼土菜地锅鸡、牛羊肉、烧烤，由经营者于2026年10月9日确认；具体供应、价格和开售安排以门店当日信息为准。夏季另有江苏盱眙小龙虾和室外星光排挡。`,
     servesCuisine: ["融合菜", "砂锅菜", "崇礼土菜", "江苏盱眙小龙虾", "烧烤"],
     address: {
       "@type": "PostalAddress",
