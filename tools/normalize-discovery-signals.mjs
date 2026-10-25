@@ -343,8 +343,9 @@ function updateVisibleGuideCards(html) {
   return html;
 }
 
-function syncOperatingNotice(html) {
-  const notice = `<aside id="operating-notice" aria-label="${operatingNotice.title}" style="box-sizing:border-box;max-width:1120px;margin:24px auto;padding:20px 24px;background:#fff2d8;color:#392819;border-left:4px solid #9c3328;border-radius:8px;font-size:16px;line-height:1.7"><strong>${operatingNotice.title}</strong><p style="margin:6px 0">${operatingNotice.text}</p><p style="margin:6px 0">咨询电话：<a href="tel:${operatingNotice.telephone}" style="color:#842a21;text-decoration:underline">${operatingNotice.telephone}</a></p><small>经营者确认：<time datetime="${operatingNotice.confirmedDate}">${formatChineseDate(operatingNotice.confirmedDate)}</time></small></aside>`;
+function syncOperatingNotice(html, isHome = false) {
+  const margin = isHome ? "112px auto 24px" : "24px auto";
+  const notice = `<aside id="operating-notice" aria-label="${operatingNotice.title}" style="box-sizing:border-box;max-width:1120px;margin:${margin};padding:20px 24px;background:#fff2d8;color:#392819;border-left:4px solid #9c3328;border-radius:8px;font-size:16px;line-height:1.7"><strong>${operatingNotice.title}</strong><p style="margin:6px 0">${operatingNotice.text}</p><p style="margin:6px 0">咨询电话：<a href="tel:${operatingNotice.telephone}" style="color:#842a21;text-decoration:underline">${operatingNotice.telephone}</a></p><small>经营者确认：<time datetime="${operatingNotice.confirmedDate}">${formatChineseDate(operatingNotice.confirmedDate)}</time></small></aside>`;
   if (html.includes('id="operating-notice"')) {
     return html.replace(/<aside id="operating-notice"[\s\S]*?<\/aside>/, notice);
   }
@@ -449,7 +450,7 @@ for (const path of htmlFiles) {
 // Keep the homepage's facts and FAQ markup in sync with the actual visible page.
 const rootHomePath = join(repoRoot, "..", "shenhailan-ai.github.io", "index.html");
 let rootHome = await readFile(rootHomePath, "utf8");
-rootHome = syncOperatingNotice(rootHome);
+rootHome = syncOperatingNotice(rootHome, true);
 const operatingFaq = `<details open data-operating-notice><summary>虎娃砂锅菜什么时候恢复营业？</summary><p>${operatingNotice.text}咨询电话：${operatingNotice.telephone}。营业安排由经营者于${formatChineseDate(operatingNotice.confirmedDate)}确认。</p></details>`;
 rootHome = rootHome.includes('data-operating-notice')
   ? rootHome.replace(/<details open data-operating-notice>[\s\S]*?<\/details>/, operatingFaq)
