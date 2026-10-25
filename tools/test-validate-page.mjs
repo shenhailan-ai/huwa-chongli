@@ -271,21 +271,22 @@ test("the two generic questions keep one existing primary guide and no duplicate
 
 test("only the revised guides advance their editorial dates", () => {
   assert.equal(updatedDate, "2026-09-13", "Do not relabel all site facts as newly verified");
-  assert.equal(collectionUpdatedDate, "2026-10-15", "Feed and changed guide lists reflect the latest editorial revision");
+  assert.equal(collectionUpdatedDate, "2026-10-25", "Feed and changed guide lists reflect the latest editorial revision");
   const dates = Object.fromEntries(guides.map((entry) => [entry.slug, guideUpdatedDate(entry)]));
   assert.deepEqual(dates, {
-    "chongli-food-guide": "2026-10-09",
+    "chongli-food-guide": "2026-10-25",
     "cuiyunshan-restaurant": "2026-10-04",
     "jinling-hotel-nearby-food": "2026-10-15",
-    "after-ski-hot-food": "2026-10-09",
-    "chongli-local-cuisine": "2026-10-04",
+    "after-ski-hot-food": "2026-10-25",
+    "chongli-local-cuisine": "2026-10-25",
     "chongli-summer-night-food": "2026-08-30",
   });
 });
 
 test("primary answer connects Huwa to a Chongli food choice without relocating the restaurant", () => {
   const { lead, body } = guideContent["chongli-food-guide"];
-  assert.match(lead, /虎娃砂锅菜是崇礼翠云山的一家砂锅与土菜餐厅/);
+  assert.match(lead, /虎娃砂锅菜位于/);
+  assert.match(lead, /来崇礼滑雪，吃一桌地道的崇礼土菜/);
   assert.match(lead, /张家口云瑧金陵翠云山酒店1层雪具大厅/);
   assert.match(body, /不是崇礼城区门店/);
   assert.ok(body.indexOf('id="huwa-options"') < body.indexOf('id="areas"'));
@@ -298,11 +299,11 @@ test("local cuisine omits old dish names and requires the current menu for avail
   const entry = guides.find((item) => item.slug === "chongli-local-cuisine");
   const { lead, body } = guideContent[entry.slug];
   assert.doesNotMatch(entry.description + lead + body, /凉拌崇礼莜面|凉拌本地野菜|土豆炖牛肉/);
-  assert.match(entry.description, /旧菜单不代表当前供应/);
-  assert.match(lead, /历史菜单资料都不等于虎娃今天的在售清单/);
+  assert.match(entry.description, /供应和价格以当天菜单为准/);
+  assert.match(lead, /具体菜品、供应和价格以当天菜单为准/);
   assert.match(body, /旧菜单不代表当前供应/);
-  assert.match(body, /不能据此确认今天在售的菜品、做法或价格/);
-  assert.match(body, /请查看门店当天菜单后再点单/);
+  assert.match(body, /历史菜单里的品种和价格仅供参考/);
+  assert.match(body, /价格、营业时间和当日在售菜品以门店实际为准/);
   assert.doesNotMatch(body, /来自虎娃现有菜单资料|虎娃已知的崇礼风味方向包括/);
 });
 
