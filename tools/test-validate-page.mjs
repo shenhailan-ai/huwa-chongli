@@ -276,7 +276,7 @@ test("only the revised guides advance their editorial dates", () => {
   assert.deepEqual(dates, {
     "chongli-food-guide": "2026-10-25",
     "cuiyunshan-restaurant": "2026-10-04",
-    "jinling-hotel-nearby-food": "2026-10-15",
+    "jinling-hotel-nearby-food": "2026-10-25",
     "after-ski-hot-food": "2026-10-25",
     "chongli-local-cuisine": "2026-10-25",
     "chongli-summer-night-food": "2026-08-30",

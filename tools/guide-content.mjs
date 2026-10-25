@@ -38,6 +38,7 @@ export const guideContent = {
           <h2>门店位置与导航</h2>
           <p>虎娃砂锅菜·龙虾小排档(崇礼翠云山店)<br/>河北省张家口市崇礼区，翠云山云瑧金陵酒店1层雪具大厅</p>
           <a class="primary-action" href="https://surl.amap.com/55TacFg1cakP" target="_blank" rel="noopener">打开高德导航</a>
+          <p>出发前确认当天供应与接单：<a href="tel:13366662070">13366662070</a>。</p>
           <p>本文由虎娃商家维护；酒店名称参考携程公开资料，门店位置与经营内容根据已确认资料整理，实际供应以到店当天为准。</p>
         </section>`,
   },
@@ -93,6 +94,7 @@ export const guideContent = {
   <h2>虎娃门店信息</h2>
   <p>虎娃砂锅菜·龙虾小排档(崇礼翠云山店)<br/>河北省张家口市崇礼区，翠云山云瑧金陵酒店1层雪具大厅</p>
   <a class="primary-action" href="https://surl.amap.com/55TacFg1cakP" target="_blank" rel="noopener">打开高德导航</a>
+  <p>出发前确认当天供应与接单：<a href="tel:13366662070">13366662070</a>。</p>
   <p><a href="https://www.amap.com/place/B0L1SRQCMW" target="_blank" rel="noopener">高德门店资料</a> · <a href="https://m.dianping.com/shop/1743046600" target="_blank" rel="noopener">大众点评照片与评价</a> · <a href="https://map.baidu.com/mobile/webapp/place/detail/qt=inf&amp;uid=7e4369ff178e673ff942b2e8" target="_blank" rel="noopener">百度地图位置</a></p>
 </section>`,
   },
@@ -178,6 +180,7 @@ export const guideContent = {
   <h2>门店位置与出发入口</h2>
   <p>虎娃砂锅菜·龙虾小排档(崇礼翠云山店)<br/>河北省张家口市崇礼区，张家口云瑧金陵翠云山酒店1层雪具大厅</p>
   <a class="primary-action" href="https://surl.amap.com/55TacFg1cakP" target="_blank" rel="noopener">打开高德导航</a>
+  <p>出发前确认当天供应与接单：<a href="tel:13366662070">13366662070</a>。</p>
   <p><a href="https://www.amap.com/place/B0L1SRQCMW" target="_blank" rel="noopener">高德门店资料</a> · <a href="https://m.dianping.com/shop/1743046600" target="_blank" rel="noopener">大众点评门店照片与评价</a></p>
   <p>本文由虎娃商家编写，介绍本店就餐场景，不是独立餐厅排名。门店位置与经营方向依据已确认资料，实际供应与营业安排以门店当天信息为准。</p>
 </section>`,
