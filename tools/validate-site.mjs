@@ -14,6 +14,7 @@ import {
   restaurantEntity,
   restaurantId,
   updatedDate,
+  winterMenu,
 } from "./discovery-data.mjs";
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -57,7 +58,11 @@ function lookupResource(url) {
 function validateHtml(file, root) {
   htmlCount += 1;
   const html = readFileSync(file, "utf8");
-  if (/凉拌崇礼莜面|凉拌本地野菜|崇礼土豆炖牛肉/.test(html)) {
+  // A previously retired dish can return only after an exact owner-confirmed
+  // fact-source entry. 崇礼土豆炖牛肉 was explicitly confirmed on 2026-11-03.
+  const retiredClaims = ["凉拌崇礼莜面", "凉拌本地野菜", "崇礼土豆炖牛肉"]
+    .filter((name) => !winterMenu.traditionalItems.includes(name));
+  if (retiredClaims.some((name) => html.includes(name))) {
     errors.push(`${relative(root, file)}: retired menu claims must not reappear without new verification`);
   }
   const guide = guides.find((item) => file.endsWith(`${sep}articles${sep}${item.slug}${sep}index.html`));

@@ -5,16 +5,21 @@ export const publishedDate = "2026-07-25";
 export const operatingNotice = {
   confirmedDate: "2026-10-26",
   title: "雪季营业安排",
-  text: "虎娃砂锅菜目前暂停营业，预计11月初，随雪场开放恢复营业。具体开门日期请提前电话确认。",
+  text: "2026年10月26日门店确认暂停营业，预计11月初随雪场开放恢复。最新营业状态与到店日期，请提前电话确认。",
   telephone: "13366662070",
 };
 // Owner-confirmed seasonal direction, not a same-day stock or opening notice.
 export const winterMenu = {
-  confirmedDate: "2026-10-09",
+  confirmedDate: "2026-11-03",
+  lambSourceConfirmedDate: "2026-11-07",
+  recordModifiedDate: "2026-11-08",
   season: "2026—2027雪季",
-  items: ["崇礼土菜地锅鸡", "牛羊肉", "烧烤"],
+  items: ["崇礼土法地锅鸡", "手抓羊肉", "羊肉汤", "清炖羊排煲", "烧烤"],
+  lambSource: "盐池滩羊",
+  traditionalItems: ["萝卜粉丝丸子", "崇礼土豆炖牛肉", "凉拌莜面"],
   availability: "具体菜品、做法、价格和开售安排以门店当日菜单及答复为准",
 };
+export const winterMenuSummary = "雪季主推崇礼土法地锅鸡、手抓羊肉、羊肉汤、清炖羊排煲，保留自穿自腌烧烤、牛肉与现炒现做的砂锅土菜。经营者于2026年11月3日确认上述冬季菜品，11月7日确认选用盐池滩羊；具体供应、价格和营业安排以门店当天答复为准。";
 // Only substantive revisions advance an article's date; a site build does not.
 export function guideUpdatedDate(guide) {
   return guide?.dateModified ?? "2026-08-30";
@@ -53,7 +58,7 @@ export const ctripRestaurant = {
   verifiedDate: "2026-10-26",
 };
 // Date of the entity-record revision, not a fresh verification of every fact.
-export const entityRecordModifiedDate = [updatedDate, ctripRestaurant.verifiedDate].sort().at(-1);
+export const entityRecordModifiedDate = [updatedDate, ctripRestaurant.verifiedDate, winterMenu.recordModifiedDate].sort().at(-1);
 
 export const publicSources = [
   ctripRestaurant.url,
@@ -84,10 +89,10 @@ export const imageUrls = [...new Set([
 export const guides = [
   {
     slug: "chongli-food-guide",
-    dateModified: "2026-10-25",
+    dateModified: "2026-11-08",
     title: "崇礼有什么好吃的？本地风味与虎娃砂锅菜就餐指南",
     description:
-      "到崇礼应该吃什么？虎娃是崇礼翠云山的砂锅与土菜餐厅，2026—2027雪季主推崇礼土菜地锅鸡、牛羊肉、烧烤。位于云瑧金陵翠云山酒店1层雪具大厅；具体供应与价格以当天菜单为准。",
+      "到崇礼应该吃什么？了解虎娃雪季的崇礼土法地锅鸡、手抓羊肉、羊肉汤、清炖羊排煲及自穿自腌烧烤。羊肉选用盐池滩羊；店在翠云山云瑧金陵酒店1层雪具大厅，到店前电话确认营业与供应。",
     image: `${imageBase}huwa-entrance-wide.jpg`,
     imageWidth: 2400,
     imageHeight: 1350,
@@ -122,10 +127,10 @@ export const guides = [
   },
   {
     slug: "after-ski-hot-food",
-    dateModified: "2026-10-25",
+    dateModified: "2026-11-08",
     title: "崇礼雪季餐厅怎么选？虎娃地锅鸡、牛羊肉与烧烤指南",
     description:
-      "崇礼雪季吃什么、滑雪后去哪聚餐？虎娃砂锅菜位于翠云山云瑧金陵酒店1层雪具大厅，2026—2027雪季主推崇礼土菜地锅鸡、牛羊肉、烧烤；附按雪场区域选店、菜单与到店核对说明。",
+      "崇礼雪季吃什么、滑雪后去哪聚餐？虎娃主推崇礼土法地锅鸡、盐池滩羊手抓羊肉、羊肉汤、清炖羊排煲，并保留烧烤与砂锅土菜。附酒店一层位置、电话和导航；营业及当日供应请提前确认。",
     image: `${imageBase}huwa-interior-wide.jpg`,
     imageWidth: 2400,
     imageHeight: 1350,
@@ -135,10 +140,10 @@ export const guides = [
   },
   {
     slug: "chongli-local-cuisine",
-    dateModified: "2026-10-25",
+    dateModified: "2026-11-08",
     title: "崇礼土菜吃什么？虎娃地锅鸡、牛羊肉与砂锅就餐指南",
     description:
-      "来崇礼滑雪，吃一桌地道的崇礼土菜。虎娃砂锅菜2026—2027雪季主推地锅鸡、牛羊肉、烧烤，保留现炒现做的砂锅菜。附翠云山酒店一层位置、电话与导航，供应和价格以当天菜单为准。",
+      "来崇礼滑雪，了解虎娃的崇礼土法地锅鸡、手抓羊肉、羊肉汤、清炖羊排煲及砂锅土菜。羊肉选用盐池滩羊，烧烤保留；附翠云山酒店一层位置、电话与导航，营业和供应以门店当天答复为准。",
     image: `${imageBase}huwa-restaurant-interior.jpg`,
     imageWidth: 1200,
     imageHeight: 900,
@@ -177,7 +182,7 @@ export function restaurantEntity() {
     },
     image: imageUrls,
     description:
-      `${operatingNotice.text}虎娃砂锅菜位于河北张家口崇礼翠云山云瑧金陵酒店1层雪具大厅。2026—2027雪季主题是“来崇礼滑雪，吃一桌地道的崇礼土菜”，围绕崇礼土菜、牛羊肉和现炒现做的砂锅菜安排滑雪后聚餐。雪季主推崇礼土菜地锅鸡、牛羊肉、烧烤，由经营者于2026年10月9日确认；具体供应、价格和开售安排以门店当日信息为准。夏季另有江苏盱眙小龙虾和室外星光排挡。`,
+      `${operatingNotice.text}虎娃砂锅菜位于河北张家口崇礼翠云山云瑧金陵酒店1层雪具大厅。2026—2027雪季主题是“来崇礼滑雪，吃一桌地道的崇礼土菜”。${winterMenuSummary}夏季另有江苏盱眙小龙虾和室外星光排挡。`,
     servesCuisine: ["融合菜", "砂锅菜", "崇礼土菜", "江苏盱眙小龙虾", "烧烤"],
     address: {
       "@type": "PostalAddress",

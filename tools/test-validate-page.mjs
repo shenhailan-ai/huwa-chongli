@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { parseSrcset, validateHomeImages, validateMerchantDouyinLinks, validatePage } from "./validate-page.mjs";
-import { guides, guideUpdatedDate, updatedDate, collectionUpdatedDate, winterMenu, merchantDouyin, publicSources, restaurantEntity } from "./discovery-data.mjs";
+import { guides, guideUpdatedDate, updatedDate, collectionUpdatedDate, winterMenu, operatingNotice, merchantDouyin, publicSources, restaurantEntity } from "./discovery-data.mjs";
 import { guideContent } from "./guide-content.mjs";
 
 const origin = "https://huwachongli.com";
@@ -271,14 +271,14 @@ test("the two generic questions keep one existing primary guide and no duplicate
 
 test("only the revised guides advance their editorial dates", () => {
   assert.equal(updatedDate, "2026-09-13", "Do not relabel all site facts as newly verified");
-  assert.equal(collectionUpdatedDate, "2026-10-26", "Site discovery reflects the owner-confirmed operating notice without re-dating unchanged articles");
+  assert.equal(collectionUpdatedDate, "2026-11-08", "Winter menu revision does not re-date unchanged guide bodies or old platform verification");
   const dates = Object.fromEntries(guides.map((entry) => [entry.slug, guideUpdatedDate(entry)]));
   assert.deepEqual(dates, {
-    "chongli-food-guide": "2026-10-25",
+    "chongli-food-guide": "2026-11-08",
     "cuiyunshan-restaurant": "2026-10-04",
     "jinling-hotel-nearby-food": "2026-10-25",
-    "after-ski-hot-food": "2026-10-25",
-    "chongli-local-cuisine": "2026-10-25",
+    "after-ski-hot-food": "2026-11-08",
+    "chongli-local-cuisine": "2026-11-08",
     "chongli-summer-night-food": "2026-08-30",
   });
 });
@@ -295,14 +295,15 @@ test("primary answer connects Huwa to a Chongli food choice without relocating t
   assert.match(body, /不是虎娃的当日菜单/);
 });
 
-test("local cuisine omits old dish names and requires the current menu for availability", () => {
+test("local cuisine distinguishes newly owner-confirmed dishes from old unverified menu claims", () => {
   const entry = guides.find((item) => item.slug === "chongli-local-cuisine");
   const { lead, body } = guideContent[entry.slug];
-  assert.doesNotMatch(entry.description + lead + body, /凉拌崇礼莜面|凉拌本地野菜|土豆炖牛肉/);
-  assert.match(entry.description, /供应和价格以当天菜单为准/);
-  assert.match(lead, /具体菜品、供应和价格以当天菜单为准/);
+  assert.doesNotMatch(entry.description + lead + body, /凉拌崇礼莜面|凉拌本地野菜/);
+  for (const item of winterMenu.traditionalItems) assert.ok(body.includes(item));
+  assert.match(entry.description, /营业和供应以门店当天答复为准/);
+  assert.match(lead, /具体供应、价格和营业安排以门店当天答复为准/);
   assert.match(body, /旧菜单不代表当前供应/);
-  assert.match(body, /历史菜单里的品种和价格仅供参考/);
+  assert.match(body, /2026年11月3日确认/);
   assert.match(body, /价格、营业时间和当日在售菜品以门店实际为准/);
   assert.doesNotMatch(body, /来自虎娃现有菜单资料|虎娃已知的崇礼风味方向包括/);
 });
@@ -340,21 +341,39 @@ test("primary guide retains source attribution and exact map identity links", ()
   assert.equal(entry.imageCaption, entranceCaption);
 });
 
-test("winter promotion uses owner-confirmed categories without inventing current inventory or rankings", () => {
-  assert.equal(winterMenu.confirmedDate, "2026-10-09");
-  assert.deepEqual(winterMenu.items, ["崇礼土菜地锅鸡", "牛羊肉", "烧烤"]);
+test("winter promotion uses November owner-confirmed dishes without inventing inventory or rankings", () => {
+  assert.equal(winterMenu.confirmedDate, "2026-11-03");
+  assert.deepEqual(winterMenu.items, ["崇礼土法地锅鸡", "手抓羊肉", "羊肉汤", "清炖羊排煲", "烧烤"]);
   const entry = guides.find((item) => item.slug === "after-ski-hot-food");
   const winter = guideContent[entry.slug];
   const broad = guideContent["chongli-food-guide"];
   for (const content of [winter.lead, winter.body, broad.lead, broad.body, restaurantEntity().description]) {
     for (const item of winterMenu.items) assert.ok(content.includes(item), item);
-    assert.doesNotMatch(content, /崇礼最好的|全崇礼第一|雪季第一|\d+\s*元|已正式开售|羊排煲|土豆炖牛肉/);
+    assert.doesNotMatch(content, /崇礼最好的|全崇礼第一|雪季第一|\d+\s*元|已正式开售|苏尼特|羊排火锅/);
   }
   assert.match(winter.body, /开售安排、具体菜品和价格以门店当日菜单及答复为准/);
   assert.match(winter.body, /不是独立推荐榜单/);
   assert.match(winter.body, /不是餐厅排名/);
   assert.ok(entry.image.endsWith("/huwa-interior-wide.jpg"), "Do not label an old dish image as a new winter dish");
   assert.match(broad.body, /after-ski-hot-food\/#winter-menu/);
+});
+
+test("lamb sourcing is owner-confirmed, not an invented Chongli origin or independent endorsement", () => {
+  assert.equal(winterMenu.lambSourceConfirmedDate, "2026-11-07");
+  assert.equal(winterMenu.lambSource, "盐池滩羊");
+  assert.match(guideContent["chongli-food-guide"].body, /不把盐池说成崇礼/);
+  assert.match(guideContent["chongli-food-guide"].body, /不是独立品质认证/);
+  assert.match(restaurantEntity().description, /11月7日确认选用盐池滩羊/);
+});
+
+test("menu refresh does not silently confirm reopening or daily hours", () => {
+  assert.equal(operatingNotice.confirmedDate, "2026-10-26");
+  assert.match(operatingNotice.text, /2026年10月26日门店确认暂停营业/);
+  assert.match(operatingNotice.text, /最新营业状态与到店日期，请提前电话确认/);
+  assert.doesNotMatch(operatingNotice.text, /已恢复营业|正常营业|11月8日开业/);
+  const entity = restaurantEntity();
+  assert.equal(entity.openingHours, undefined);
+  assert.equal(entity.openingHoursSpecification, undefined);
 });
 
 test("verified Douyin profile and merchant winter article have distinct entity roles", () => {
