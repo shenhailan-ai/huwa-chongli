@@ -453,7 +453,7 @@ for (const path of htmlFiles) {
 const rootHomePath = join(repoRoot, "..", "shenhailan-ai.github.io", "index.html");
 let rootHome = await readFile(rootHomePath, "utf8");
 rootHome = syncOperatingNotice(rootHome, true);
-const operatingFaq = `<details open data-operating-notice><summary>虎娃砂锅菜什么时候恢复营业？</summary><p>${operatingNotice.text}咨询电话：${operatingNotice.telephone}。营业安排由经营者于${formatChineseDate(operatingNotice.confirmedDate)}确认。</p></details>`;
+const operatingFaq = `<details open data-operating-notice><summary>虎娃砂锅菜现在正常营业吗？</summary><p>${operatingNotice.text}咨询电话：${operatingNotice.telephone}。营业安排由经营者于${formatChineseDate(operatingNotice.confirmedDate)}确认。</p></details>`;
 rootHome = rootHome.includes('data-operating-notice')
   ? rootHome.replace(/<details open data-operating-notice>[\s\S]*?<\/details>/, operatingFaq)
   : rootHome.replace('<div class="faq-list">', `<div class="faq-list">${operatingFaq}`);

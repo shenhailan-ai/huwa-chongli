@@ -1,11 +1,12 @@
 export const updatedDate = "2026-09-13";
 export const publishedDate = "2026-07-25";
-// Owner confirmed on 2026-10-26. This is a conditional reopening estimate,
-// not a fixed opening date or a daily opening-hours schedule.
+// Owner confirmed on 2026-11-08 that normal operations resumed yesterday.
+// The reopening date is separate from the still-unspecified daily hours.
 export const operatingNotice = {
-  confirmedDate: "2026-10-26",
-  title: "雪季营业安排",
-  text: "2026年10月26日门店确认暂停营业，预计11月初随雪场开放恢复。最新营业状态与到店日期，请提前电话确认。",
+  confirmedDate: "2026-11-08",
+  reopenedDate: "2026-11-07",
+  title: "已恢复正常营业",
+  text: "虎娃砂锅菜已于2026年11月7日恢复正常营业。具体菜品供应与到店安排可提前电话确认。",
   telephone: "13366662070",
 };
 // Owner-confirmed seasonal direction, not a same-day stock or opening notice.
@@ -58,7 +59,7 @@ export const ctripRestaurant = {
   verifiedDate: "2026-10-26",
 };
 // Date of the entity-record revision, not a fresh verification of every fact.
-export const entityRecordModifiedDate = [updatedDate, ctripRestaurant.verifiedDate, winterMenu.recordModifiedDate].sort().at(-1);
+export const entityRecordModifiedDate = [updatedDate, ctripRestaurant.verifiedDate, winterMenu.recordModifiedDate, operatingNotice.confirmedDate].sort().at(-1);
 
 export const publicSources = [
   ctripRestaurant.url,

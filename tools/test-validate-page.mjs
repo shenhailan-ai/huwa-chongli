@@ -366,11 +366,12 @@ test("lamb sourcing is owner-confirmed, not an invented Chongli origin or indepe
   assert.match(restaurantEntity().description, /11月7日确认选用盐池滩羊/);
 });
 
-test("menu refresh does not silently confirm reopening or daily hours", () => {
-  assert.equal(operatingNotice.confirmedDate, "2026-10-26");
-  assert.match(operatingNotice.text, /2026年10月26日门店确认暂停营业/);
-  assert.match(operatingNotice.text, /最新营业状态与到店日期，请提前电话确认/);
-  assert.doesNotMatch(operatingNotice.text, /已恢复营业|正常营业|11月8日开业/);
+test("owner-confirmed reopening keeps the actual date separate from confirmation and daily hours", () => {
+  assert.equal(operatingNotice.confirmedDate, "2026-11-08");
+  assert.equal(operatingNotice.reopenedDate, "2026-11-07");
+  assert.match(operatingNotice.text, /2026年11月7日恢复正常营业/);
+  assert.doesNotMatch(operatingNotice.text, /暂停营业|预计11月初|11月8日.*(?:恢复|开业)/);
+  assert.ok(restaurantEntity().description.startsWith(operatingNotice.text));
   const entity = restaurantEntity();
   assert.equal(entity.openingHours, undefined);
   assert.equal(entity.openingHoursSpecification, undefined);
