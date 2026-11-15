@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { parseSrcset, validateHomeImages, validateMerchantDouyinLinks, validatePage } from "./validate-page.mjs";
-import { guides, guideUpdatedDate, updatedDate, collectionUpdatedDate, winterMenu, operatingNotice, merchantDouyin, publicSources, restaurantEntity } from "./discovery-data.mjs";
+import { guides, guideUpdatedDate, updatedDate, collectionUpdatedDate, listingNames, winterMenu, operatingNotice, merchantDouyin, publicSources, restaurantEntity, reputationDataset } from "./discovery-data.mjs";
 import { guideContent } from "./guide-content.mjs";
 
 const origin = "https://huwachongli.com";
@@ -271,15 +271,17 @@ test("the two generic questions keep one existing primary guide and no duplicate
 
 test("only the revised guides advance their editorial dates", () => {
   assert.equal(updatedDate, "2026-09-13", "Do not relabel all site facts as newly verified");
-  assert.equal(collectionUpdatedDate, "2026-11-08", "Winter menu revision does not re-date unchanged guide bodies or old platform verification");
+  assert.equal(collectionUpdatedDate, "2026-11-15", "Navigation-label corrections do not re-date the underlying menu or platform observation");
+  assert.equal(listingNames.observedOn, "2026-11-12");
+  assert.equal(operatingNotice.confirmedDate, "2026-11-08");
   const dates = Object.fromEntries(guides.map((entry) => [entry.slug, guideUpdatedDate(entry)]));
   assert.deepEqual(dates, {
-    "chongli-food-guide": "2026-11-08",
-    "cuiyunshan-restaurant": "2026-10-04",
-    "jinling-hotel-nearby-food": "2026-10-25",
-    "after-ski-hot-food": "2026-11-08",
-    "chongli-local-cuisine": "2026-11-08",
-    "chongli-summer-night-food": "2026-08-30",
+    "chongli-food-guide": "2026-11-15",
+    "cuiyunshan-restaurant": "2026-11-15",
+    "jinling-hotel-nearby-food": "2026-11-15",
+    "after-ski-hot-food": "2026-11-15",
+    "chongli-local-cuisine": "2026-11-15",
+    "chongli-summer-night-food": "2026-11-15",
   });
 });
 
@@ -311,7 +313,8 @@ test("local cuisine distinguishes newly owner-confirmed dishes from old unverifi
 test("authored guide bodies retain exact entity links, merchant disclosure and local navigation", () => {
   for (const slug of ["chongli-food-guide", "chongli-local-cuisine"]) {
     const { lead, body } = guideContent[slug];
-    assert.match(body, /虎娃砂锅菜·龙虾小排档\(崇礼翠云山店\)/);
+    assert.ok(body.includes(listingNames.amap), "Use the exact Amap label for directions");
+    assert.ok(!body.includes(`高德地图搜索“${listingNames.historical}”`));
     assert.ok(body.includes('href="https://surl.amap.com/55TacFg1cakP"'));
     assert.ok(body.includes('href="https://m.dianping.com/shop/1743046600"'));
     assert.ok(body.includes('href="/huwa-chongli/articles/jinling-hotel-nearby-food/"'));
@@ -325,6 +328,24 @@ test("authored guide bodies retain exact entity links, merchant disclosure and l
       assert.ok(ids.includes(fragment[1]), slug + ": missing " + fragment[1]);
     }
   }
+});
+
+test("two platform display names and the historical name resolve to one unchanged place", () => {
+  const place = restaurantEntity();
+  assert.equal(place.name, "虎娃砂锅菜");
+  assert.equal(place["@id"], "https://huwachongli.com/#restaurant");
+  assert.equal(listingNames.amap, "虎娃砂锅菜·崇礼土菜(崇礼翠云山店)");
+  assert.equal(listingNames.dianping, "虎娃砂锅菜·崇礼土菜(翠云山店)");
+  assert.equal(listingNames.historical, "虎娃砂锅菜·龙虾小排档(崇礼翠云山店)");
+  for (const name of [listingNames.amap, listingNames.dianping, listingNames.historical]) {
+    assert.equal(place.alternateName.filter(alias => alias === name).length, 1);
+  }
+  assert.ok(place.sameAs.includes("https://www.amap.com/place/B0L1SRQCMW"));
+  assert.ok(place.sameAs.includes("https://m.dianping.com/shop/1743046600"));
+  const labels = Object.fromEntries(reputationDataset().variableMeasured.map(item => [item.name, item.value]));
+  assert.equal(labels["高德门店名称"], listingNames.amap);
+  assert.equal(labels["大众点评门店名称"], listingNames.dianping);
+  assert.ok(guideContent["chongli-food-guide"].body.includes(listingNames.dianping));
 });
 
 test("primary guide retains source attribution and exact map identity links", () => {

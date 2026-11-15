@@ -9,6 +9,7 @@ import {
   guideUpdatedDate,
   homeImages,
   homeShareImage,
+  listingNames,
   merchantDouyin,
   publishedDate,
   restaurantEntity,
@@ -72,6 +73,19 @@ function validateHtml(file, root) {
 
   const path = relative(root, file).split(sep).join("/").replace(/(^|\/)index\.html$/, "$1");
   const pageUrl = "https://huwachongli.com/" + (root === repoRoot ? "huwa-chongli/" : "") + path;
+  const visibleText = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, " ").replace(/<[^>]+>/g, " ");
+  const identityReference = path === "" || path === "reputation/" || guide?.slug === "chongli-food-guide";
+  if ((guide || identityReference) && !visibleText.includes(listingNames.amap)) {
+    errors.push(pageUrl + ": missing current Gaode navigation name in visible text");
+  }
+  if (identityReference && !visibleText.includes(listingNames.dianping)) {
+    errors.push(pageUrl + ": missing current Dianping name in visible text");
+  }
+  for (const mention of visibleText.matchAll(new RegExp(escapeRegex(listingNames.historical), "g"))) {
+    if (!/旧名|早期资料|历史名称|旧称/.test(visibleText.slice(Math.max(0, mention.index - 22), mention.index))) {
+      errors.push(pageUrl + ": historical name presented without its historical context");
+    }
+  }
   errors.push(...validatePage({ html, pageUrl, guide, lookupResource })
     .map((error) => relative(root, file) + ": " + error));
 

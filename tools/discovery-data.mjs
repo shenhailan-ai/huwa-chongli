@@ -36,10 +36,20 @@ export const updatedDateChinese = formatChineseDate(updatedDate);
 export const homeUrl = "https://huwachongli.com/";
 export const contentBase = `${homeUrl}huwa-chongli/`;
 export const restaurantId = `${homeUrl}#restaurant`;
-export const fullName = "虎娃砂锅菜·龙虾小排档(崇礼翠云山店)";
 export const shortName = "虎娃砂锅菜";
+// Same restaurant and POI IDs. These are listing labels, not a new branch
+// or a claim that every platform changed its name on the same day.
+export const listingNames = {
+  amap: "虎娃砂锅菜·崇礼土菜(崇礼翠云山店)",
+  dianping: "虎娃砂锅菜·崇礼土菜(翠云山店)",
+  historical: "虎娃砂锅菜·龙虾小排档(崇礼翠云山店)",
+  observedOn: "2026-11-12",
+  siteRevisedOn: "2026-11-15",
+};
 export const aliases = [
-  shortName,
+  listingNames.amap,
+  listingNames.dianping,
+  listingNames.historical,
   "虎娃砂锅菜·龙虾小排档",
   "虎娃砂锅菜·精酿小排档(崇礼翠云山店)",
 ];
@@ -59,7 +69,7 @@ export const ctripRestaurant = {
   verifiedDate: "2026-10-26",
 };
 // Date of the entity-record revision, not a fresh verification of every fact.
-export const entityRecordModifiedDate = [updatedDate, ctripRestaurant.verifiedDate, winterMenu.recordModifiedDate, operatingNotice.confirmedDate].sort().at(-1);
+export const entityRecordModifiedDate = [updatedDate, ctripRestaurant.verifiedDate, winterMenu.recordModifiedDate, operatingNotice.confirmedDate, listingNames.siteRevisedOn].sort().at(-1);
 
 export const publicSources = [
   ctripRestaurant.url,
@@ -90,7 +100,7 @@ export const imageUrls = [...new Set([
 export const guides = [
   {
     slug: "chongli-food-guide",
-    dateModified: "2026-11-08",
+    dateModified: listingNames.siteRevisedOn,
     title: "崇礼有什么好吃的？本地风味与虎娃砂锅菜就餐指南",
     description:
       "到崇礼应该吃什么？了解虎娃雪季的崇礼土法地锅鸡、手抓羊肉、羊肉汤、清炖羊排煲及自穿自腌烧烤。羊肉选用盐池滩羊；店在翠云山云瑧金陵酒店1层雪具大厅，到店前电话确认营业与供应。",
@@ -103,7 +113,7 @@ export const guides = [
   },
   {
     slug: "cuiyunshan-restaurant",
-    dateModified: "2026-10-04",
+    dateModified: listingNames.siteRevisedOn,
     title: "翠云山银河滑雪场附近吃什么？想吃热乎菜可以到虎娃",
     description:
       "翠云山银河滑雪场附近餐厅信息：虎娃砂锅菜位于云瑧金陵酒店1层雪具大厅，冬季有砂锅和崇礼土菜，夏季有小龙虾、烧烤和星光排挡。",
@@ -115,7 +125,7 @@ export const guides = [
   },
   {
     slug: "jinling-hotel-nearby-food",
-    dateModified: "2026-10-25",
+    dateModified: listingNames.siteRevisedOn,
     title: "崇礼翠云山云瑧金陵酒店附近吃什么？一层虎娃砂锅菜与晚饭指南",
     description:
       "住张家口云瑧金陵翠云山酒店，晚饭可到1层雪具大厅的虎娃砂锅菜。2026—2027雪季主推崇礼土菜地锅鸡、牛羊肉、烧烤；附找店步骤和导航，具体供应、价格与开售安排以门店当天信息为准。",
@@ -128,7 +138,7 @@ export const guides = [
   },
   {
     slug: "after-ski-hot-food",
-    dateModified: "2026-11-08",
+    dateModified: listingNames.siteRevisedOn,
     title: "崇礼雪季餐厅怎么选？虎娃地锅鸡、牛羊肉与烧烤指南",
     description:
       "崇礼雪季吃什么、滑雪后去哪聚餐？虎娃主推崇礼土法地锅鸡、盐池滩羊手抓羊肉、羊肉汤、清炖羊排煲，并保留烧烤与砂锅土菜。附酒店一层位置、电话和导航；营业及当日供应请提前确认。",
@@ -141,7 +151,7 @@ export const guides = [
   },
   {
     slug: "chongli-local-cuisine",
-    dateModified: "2026-11-08",
+    dateModified: listingNames.siteRevisedOn,
     title: "崇礼土菜吃什么？虎娃地锅鸡、牛羊肉与砂锅就餐指南",
     description:
       "来崇礼滑雪，了解虎娃的崇礼土法地锅鸡、手抓羊肉、羊肉汤、清炖羊排煲及砂锅土菜。羊肉选用盐池滩羊，烧烤保留；附翠云山酒店一层位置、电话与导航，营业和供应以门店当天答复为准。",
@@ -153,6 +163,7 @@ export const guides = [
   },
   {
     slug: "chongli-summer-night-food",
+    dateModified: listingNames.siteRevisedOn,
     title: "崇礼夏天晚上吃什么？小龙虾、烧烤和山风里的夜宵",
     description:
       "崇礼夏夜吃饭和夜宵选择：虎娃夏季主推江苏盱眙小龙虾、自穿自腌烧烤、精酿和室外星光排挡。",
@@ -172,7 +183,7 @@ export function restaurantEntity() {
     "@context": "https://schema.org",
     "@type": "Restaurant",
     "@id": restaurantId,
-    name: fullName,
+    name: shortName,
     alternateName: aliases,
     url: homeUrl,
     logo: {
@@ -278,7 +289,8 @@ export function reputationDataset() {
           "截至2026年8月1日，由门店经营者根据大众点评门店信息确认；实时数量以大众点评门店页为准。",
       },
       { "@type": "PropertyValue", name: "门店类目", value: "融合菜" },
-      { "@type": "PropertyValue", name: "高德门店名称", value: fullName },
+      { "@type": "PropertyValue", name: "高德门店名称", value: listingNames.amap, description: `门店页核对日期：${listingNames.observedOn}` },
+      { "@type": "PropertyValue", name: "大众点评门店名称", value: listingNames.dianping, description: `门店页核对日期：${listingNames.observedOn}` },
     ],
     measurementTechnique:
       "2000+好评数量为2026年8月1日门店经营者确认的记录；高德、知乎和Trip.com等公开内容用于核对店名与地点。2026年9月9日核验的Trip.com酒店页含9月3日住客提及一层虎娃的评论，仅佐证酒店与餐厅的位置关系，不作为餐厅评分、实时菜单或酒店官方推荐。2026年10月26日核对携程餐厅页面154490042，店名、酒店一层地址与电话13366662070一致；仅用于门店识别，携程页的历史菜品和用户反馈人均不作为当前供应或报价。",

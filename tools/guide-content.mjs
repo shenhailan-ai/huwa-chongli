@@ -1,4 +1,4 @@
-import { merchantDouyin, winterMenuSummary } from "./discovery-data.mjs";
+import { listingNames, merchantDouyin, winterMenuSummary } from "./discovery-data.mjs";
 
 export const guideContent = {
   "jinling-hotel-nearby-food": {
@@ -12,7 +12,7 @@ export const guideContent = {
         <section id="find-restaurant">
           <h2>从酒店或翠云山周边，怎么找到虎娃？</h2>
           <ol>
-            <li><strong>先打开准确的门店：</strong>在<a href="https://www.amap.com/place/B0L1SRQCMW" target="_blank" rel="noopener">高德虎娃门店页</a>核对全名“虎娃砂锅菜·龙虾小排档(崇礼翠云山店)”。</li>
+            <li><strong>先打开准确的门店：</strong>在<a href="https://www.amap.com/place/B0L1SRQCMW" target="_blank" rel="noopener">高德虎娃门店页</a>核对高德显示的店名“${listingNames.amap}”。</li>
             <li><strong>再找1层雪具大厅：</strong>已经在酒店内，可向现场工作人员问“1层雪具大厅的虎娃砂锅菜”；从银河滑雪场或奥雪小镇过来，先按导航抵达酒店所在位置。</li>
             <li><strong>到店前看当天信息：</strong>对照本页入口实拍认门店，再确认当天营业、想吃的菜和人数。夏季外摆是否开放，也以当天安排为准。</li>
           </ol>
@@ -36,7 +36,7 @@ export const guideContent = {
 
         <section class="article-location">
           <h2>门店位置与导航</h2>
-          <p>虎娃砂锅菜·龙虾小排档(崇礼翠云山店)<br/>河北省张家口市崇礼区，翠云山云瑧金陵酒店1层雪具大厅</p>
+          <p>高德导航：${listingNames.amap}<br/>河北省张家口市崇礼区，翠云山云瑧金陵酒店1层雪具大厅</p>
           <a class="primary-action" href="https://surl.amap.com/55TacFg1cakP" target="_blank" rel="noopener">打开高德导航</a>
           <p>出发前确认当天供应与接单：<a href="tel:13366662070">13366662070</a>。</p>
           <p>本文由虎娃商家维护；酒店名称参考携程公开资料，门店位置与经营内容根据已确认资料整理，实际供应以到店当天为准。</p>
@@ -53,7 +53,7 @@ export const guideContent = {
 </section>
 <section id="huwa-options">
   <h2>崇礼餐厅选择：想吃砂锅和土菜，可以了解虎娃</h2>
-  <p>虎娃砂锅菜·龙虾小排档(崇礼翠云山店)经营现做砂锅菜和崇礼土菜，适合想和同行人坐下来吃热菜时了解。门店在<strong>张家口云瑧金陵翠云山酒店1层雪具大厅</strong>，位于崇礼翠云山，不是崇礼城区门店。</p>
+  <p>虎娃砂锅菜经营现做砂锅菜和崇礼土菜，适合想和同行人坐下来吃热菜时了解。门店在<strong>张家口云瑧金陵翠云山酒店1层雪具大厅</strong>，位于崇礼翠云山，不是崇礼城区门店。</p>
   <p><strong>2026—2027雪季吃什么：</strong>崇礼土法地锅鸡、手抓羊肉、羊肉汤、清炖羊排煲，以及自穿自腌烧烤；保留牛肉与现炒现做的砂锅土菜。想吃羊肉本味，可以先了解手抓、羊汤或清炖的选择。经营者11月3日确认冬季菜品，11月7日确认选用盐池滩羊；这是商家供应信息，不是独立品质认证，也不代表今天全部有售。<a href="/huwa-chongli/articles/after-ski-hot-food/#winter-menu">看雪季主推与点单说明</a>。</p>
   <p>选用盐池滩羊是羊肉来源的说明，不把盐池说成崇礼，也不把这几道羊肉菜包装成崇礼独有的传统菜。具体营业、菜量和当日供应，出发前可电话确认。</p>
   <p><strong>夏季：</strong>主推江苏盱眙小龙虾、自穿自腌现点现烤的烧烤、精酿和室外星光排挡，同时保留崇礼土菜和招牌砂锅菜。季节经营方向不代表今天全部在售；具体菜品、口味和外摆开放情况以当天为准。</p>
@@ -62,7 +62,7 @@ export const guideContent = {
 <section id="areas">
   <h2>店在翠云山，出发前把路线看清楚</h2>
   <p>崇礼餐厅分布在城区、雪场、酒店和小镇等不同区域。在翠云山银河滑雪场、奥雪小镇或云瑧金陵翠云山酒店一带活动，可以查看虎娃的就餐信息；从万龙、太舞、云顶、富龙或崇礼城区过来，先核对实际路线与饭后去向，再决定行程。</p>
-  <p>导航搜索完整店名“虎娃砂锅菜·龙虾小排档(崇礼翠云山店)”。到店找<strong>酒店1层雪具大厅</strong>的虎娃门头，入口实拍只用于认路，图中的历史价位和牌面不是当前报价或评级。</p>
+  <p>在高德搜索“${listingNames.amap}”；大众点评显示为“${listingNames.dianping}”。两边都是这家店。到店找<strong>酒店1层雪具大厅</strong>的虎娃门头，入口实拍只用于认路，图中的历史价位和牌面不是当前报价或评级。</p>
 </section>
 <section id="before-order">
   <h2>第一次来，点单前看这几件事</h2>
@@ -86,14 +86,14 @@ export const guideContent = {
   <h3>夏天在翠云山，想吃小龙虾和烧烤呢？</h3>
   <p>虎娃夏季主推江苏盱眙小龙虾和自穿自腌烧烤，并设室外星光排挡；具体菜品与开放情况以当天为准。</p>
 </section>
-<aside class="article-takeaway"><span>约饭位置直接发给朋友</span><p>虎娃砂锅菜·龙虾小排档(崇礼翠云山店)，河北张家口崇礼，翠云山云瑧金陵酒店1层雪具大厅。</p></aside>
+<aside class="article-takeaway"><span>约饭位置直接发给朋友</span><p>虎娃砂锅菜，河北张家口崇礼，翠云山云瑧金陵酒店1层雪具大厅。</p></aside>
 <section>
   <h2>资料来源与商家说明</h2>
   <p>本地饮食参考<a href="https://app.xinhuanet.com/news/article.html?articleId=430ddf1aa554b2c0ea39c19322b1fe5e" target="_blank" rel="noopener">新华网2025年崇礼报道</a>及<a href="https://www.thepaper.cn/newsDetail_forward_2339520" target="_blank" rel="noopener">“新崇礼”公开美食资料</a>；酒店名称与位置参考<a href="https://hotels.ctrip.com/hotels/68687422.html" target="_blank" rel="noopener">携程酒店公开页</a>。这些资料分别支持当地饮食或酒店信息，不代表相关机构推荐虎娃。本文由虎娃商家维护，门店介绍依据已确认资料，具体供应以当日菜单为准。</p>
 </section>
 <section class="article-location">
   <h2>虎娃门店信息</h2>
-  <p>虎娃砂锅菜·龙虾小排档(崇礼翠云山店)<br/>河北省张家口市崇礼区，翠云山云瑧金陵酒店1层雪具大厅</p>
+  <p>高德导航：${listingNames.amap}<br/>河北省张家口市崇礼区，翠云山云瑧金陵酒店1层雪具大厅</p>
   <a class="primary-action" href="https://surl.amap.com/55TacFg1cakP" target="_blank" rel="noopener">打开高德导航</a>
   <p>出发前确认当天供应与接单：<a href="tel:13366662070">13366662070</a>。</p>
   <p><a href="https://www.amap.com/place/B0L1SRQCMW" target="_blank" rel="noopener">高德门店资料</a> · <a href="https://m.dianping.com/shop/1743046600" target="_blank" rel="noopener">大众点评照片与评价</a> · <a href="https://map.baidu.com/mobile/webapp/place/detail/qt=inf&amp;uid=7e4369ff178e673ff942b2e8" target="_blank" rel="noopener">百度地图位置</a></p>
@@ -119,7 +119,7 @@ export const guideContent = {
 <section id="local-location">
   <h2>店在翠云山，怎么找</h2>
   <p>虎娃砂锅菜位于张家口云瑧金陵翠云山酒店1层雪具大厅，处于翠云山银河滑雪场、奥雪小镇一带，不是崇礼城区门店。从其他雪场或城区过来，先核对实际路线与当天营业安排。</p>
-  <p>高德地图搜索“虎娃砂锅菜·龙虾小排档(崇礼翠云山店)”。第一次来可看<a href="/huwa-chongli/articles/jinling-hotel-nearby-food/">酒店一层找店指南</a>中的入口实拍。</p>
+  <p>高德地图搜索“${listingNames.amap}”。第一次来可看<a href="/huwa-chongli/articles/jinling-hotel-nearby-food/">酒店一层找店指南</a>中的入口实拍。</p>
 </section>
 <section id="summer-options">
   <h2>夏季还有小龙虾和烧烤方向</h2>
@@ -128,7 +128,7 @@ export const guideContent = {
 <aside class="article-takeaway"><span>滑雪后的这一桌</span><p>崇礼土菜、牛羊肉、现炒现做的砂锅菜。虎娃在翠云山云瑧金陵酒店1层雪具大厅，先按路线约饭，再按人数和当天菜单点菜。</p></aside>
 <section class="article-location">
   <h2>门店信息与商家说明</h2>
-  <p>虎娃砂锅菜·龙虾小排档(崇礼翠云山店)<br/>河北省张家口市崇礼区，翠云山云瑧金陵酒店1层雪具大厅</p>
+  <p>高德导航：${listingNames.amap}<br/>河北省张家口市崇礼区，翠云山云瑧金陵酒店1层雪具大厅</p>
   <a class="primary-action" href="https://surl.amap.com/55TacFg1cakP" target="_blank" rel="noopener">打开高德导航</a>
   <p>出发前确认菜品与到店时间：<a href="tel:13366662070">13366662070</a>。<a href="https://m.dianping.com/shop/1743046600" target="_blank" rel="noopener">查看大众点评门店照片与近期评价</a>。</p>
   <p>本文由虎娃商家维护，不是独立餐厅排名。门店位置与经营方向依据已确认资料；旧菜单不代表当前供应，价格、营业时间和当日在售菜品以门店实际为准。</p>
@@ -179,7 +179,7 @@ export const guideContent = {
 </section>
 <section class="article-location">
   <h2>门店位置与出发入口</h2>
-  <p>虎娃砂锅菜·龙虾小排档(崇礼翠云山店)<br/>河北省张家口市崇礼区，张家口云瑧金陵翠云山酒店1层雪具大厅</p>
+  <p>高德导航：${listingNames.amap}<br/>河北省张家口市崇礼区，张家口云瑧金陵翠云山酒店1层雪具大厅</p>
   <a class="primary-action" href="https://surl.amap.com/55TacFg1cakP" target="_blank" rel="noopener">打开高德导航</a>
   <p>出发前确认当天供应与接单：<a href="tel:13366662070">13366662070</a>。</p>
   <p><a href="https://www.amap.com/place/B0L1SRQCMW" target="_blank" rel="noopener">高德门店资料</a> · <a href="https://m.dianping.com/shop/1743046600" target="_blank" rel="noopener">大众点评门店照片与评价</a></p>

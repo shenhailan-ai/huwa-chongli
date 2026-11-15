@@ -5,7 +5,7 @@ import {
   contentBase,
   collectionUpdatedDate,
   entityRecordModifiedDate,
-  fullName,
+  shortName,
   guides,
   guideUpdatedDate,
   formatChineseDate,
@@ -37,7 +37,7 @@ function currentGuide(path) {
 }
 
 function restaurantReference() {
-  return { "@type": "Restaurant", "@id": restaurantId, name: fullName, url: homeUrl };
+  return { "@type": "Restaurant", "@id": restaurantId, name: shortName, url: homeUrl };
 }
 
 function publisherReference() {
@@ -95,6 +95,7 @@ function normalizeJsonLd(value, guide) {
   }
 
   if (value["@type"] === "WebPage") {
+    if (value.url === homeUrl) value.description = "虎娃砂锅菜位于河北张家口崇礼，翠云山云瑧金陵酒店1层雪具大厅。";
     value.dateModified = value.url === homeUrl ? collectionUpdatedDate
       : value["@id"] === `${contentBase}reputation/#webpage` ? entityRecordModifiedDate : updatedDate;
     if (value.about) value.about = { "@id": restaurantId };
