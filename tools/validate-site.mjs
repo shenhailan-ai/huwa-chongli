@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import { createHash } from "node:crypto";
 import { validateHomeImages, validateMerchantDouyinLinks, validatePage } from "./validate-page.mjs";
 import {
   formatRfcDate,
@@ -16,11 +17,18 @@ import {
   restaurantId,
   updatedDate,
   winterMenu,
+  winterPhotos,
 } from "./discovery-data.mjs";
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const rootSite = resolve(repoRoot, "../shenhailan-ai.github.io");
 const errors = [];
+for (const photo of winterPhotos) {
+  const file = join(repoRoot, "assets/images", photo.file);
+  if (!existsSync(file) || createHash("sha256").update(readFileSync(file)).digest("hex") !== photo.sha256) {
+    errors.push(photo.file + ": winter photo differs from the reviewed merchant asset");
+  }
+}
 let htmlCount = 0;
 let jsonLdCount = 0;
 const bytedanceVerificationCode = "8wm3TrOHg7eUJnRcSA/f";

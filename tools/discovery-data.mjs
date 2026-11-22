@@ -21,6 +21,8 @@ export const winterMenu = {
   availability: "具体菜品、做法、价格和开售安排以门店当日菜单及答复为准",
 };
 export const winterMenuSummary = "雪季主推崇礼土法地锅鸡、手抓羊肉、羊肉汤、清炖羊排煲，保留自穿自腌烧烤、牛肉与现炒现做的砂锅土菜。经营者于2026年11月3日确认上述冬季菜品，11月7日确认选用盐池滩羊；具体供应、价格和营业安排以门店当天答复为准。";
+// Publication of existing verified merchant photos, not a new menu/stock claim.
+export const winterPhotoRevision = "2026-11-23";
 // Only substantive revisions advance an article's date; a site build does not.
 export function guideUpdatedDate(guide) {
   return guide?.dateModified ?? "2026-08-30";
@@ -69,7 +71,7 @@ export const ctripRestaurant = {
   verifiedDate: "2026-10-26",
 };
 // Date of the entity-record revision, not a fresh verification of every fact.
-export const entityRecordModifiedDate = [updatedDate, ctripRestaurant.verifiedDate, winterMenu.recordModifiedDate, operatingNotice.confirmedDate, listingNames.siteRevisedOn].sort().at(-1);
+export const entityRecordModifiedDate = [updatedDate, ctripRestaurant.verifiedDate, winterMenu.recordModifiedDate, operatingNotice.confirmedDate, listingNames.siteRevisedOn, winterPhotoRevision].sort().at(-1);
 
 export const publicSources = [
   ctripRestaurant.url,
@@ -79,9 +81,28 @@ export const publicSources = [
 ];
 
 export const imageBase = `${contentBase}assets/images/`;
+// Byte-for-byte copies from the reviewed 2026-11-15 merchant photo package.
+// Chicken is a real video still; lamb is a real photo. Neither is generated.
+export const winterPhotos = [
+  {
+    file: "huwa-chongli-diguoji-real-202611.jpg", width: 1600, height: 1800,
+    dish: "崇礼土法地锅鸡",
+    alt: "虎娃崇礼土法地锅鸡实拍，筷子从锅中夹起鸡肉",
+    caption: "崇礼土法地锅鸡 · 门店实拍视频截帧。菜品与份量以当日菜单和实际出品为准。",
+    sha256: "fc3c1c8c3895526623fd2249c3a636f6040cecf63e798c46b9f87488c358a031",
+  },
+  {
+    file: "huwa-yanchi-shouzhua-lamb-real-202611.jpg", width: 1920, height: 1440,
+    dish: "手抓羊肉",
+    alt: "虎娃手抓羊肉实拍，切片羊肉装盘配小料",
+    caption: "手抓羊肉 · 门店实拍。经营者确认羊肉选用盐池滩羊；图片展示出品，不作为产地认证或固定份量承诺。",
+    sha256: "a4da13578d67f791f86a3729e86bd78850c0c8ea6ebd81c56a353cfac158ee22",
+  },
+].map((photo) => ({ ...photo, url: `${imageBase}${photo.file}` }));
 // These photos are actually visible on the homepage. Keep discovery metadata
 // representative of the restaurant year-round, not only the summer menu.
 export const homeImages = [
+  ...winterPhotos,
   { file: "huwa-entrance-wide.jpg", width: 2400, height: 1350, alt: "虎娃砂锅菜酒店1层雪具大厅入口资料图，仅供认路" },
   { file: "huwa-interior-wide.jpg", width: 2400, height: 1350, alt: "虎娃砂锅菜室内堂食环境实拍" },
   { file: "huwa-hero-crayfish-hd.jpg", width: 2400, height: 1800, alt: "虎娃夏季江苏盱眙小龙虾实拍" },
@@ -138,27 +159,28 @@ export const guides = [
   },
   {
     slug: "after-ski-hot-food",
-    dateModified: listingNames.siteRevisedOn,
+    dateModified: winterPhotoRevision,
     title: "崇礼雪季餐厅怎么选？虎娃地锅鸡、牛羊肉与烧烤指南",
     description:
       "崇礼雪季吃什么、滑雪后去哪聚餐？虎娃主推崇礼土法地锅鸡、盐池滩羊手抓羊肉、羊肉汤、清炖羊排煲，并保留烧烤与砂锅土菜。附酒店一层位置、电话和导航；营业及当日供应请提前确认。",
-    image: `${imageBase}huwa-interior-wide.jpg`,
-    imageWidth: 2400,
-    imageHeight: 1350,
-    imageAlt: "虎娃砂锅菜翠云山门店室内堂食环境实拍",
-    imageCaption: "虎娃室内堂食环境资料图。此图不是地锅鸡或牛羊肉新品图片，菜品及座位安排以门店当日信息为准。",
+    image: winterPhotos[0].url,
+    imageWidth: winterPhotos[0].width,
+    imageHeight: winterPhotos[0].height,
+    imageAlt: winterPhotos[0].alt,
+    imageCaption: winterPhotos[0].caption,
     related: ["cuiyunshan-restaurant", "chongli-local-cuisine", "chongli-food-guide"],
   },
   {
     slug: "chongli-local-cuisine",
-    dateModified: listingNames.siteRevisedOn,
+    dateModified: winterPhotoRevision,
     title: "崇礼土菜吃什么？虎娃地锅鸡、牛羊肉与砂锅就餐指南",
     description:
       "来崇礼滑雪，了解虎娃的崇礼土法地锅鸡、手抓羊肉、羊肉汤、清炖羊排煲及砂锅土菜。羊肉选用盐池滩羊，烧烤保留；附翠云山酒店一层位置、电话与导航，营业和供应以门店当天答复为准。",
-    image: `${imageBase}huwa-restaurant-interior.jpg`,
-    imageWidth: 1200,
-    imageHeight: 900,
-    imageAlt: "虎娃砂锅菜室内堂食环境实拍",
+    image: winterPhotos[1].url,
+    imageWidth: winterPhotos[1].width,
+    imageHeight: winterPhotos[1].height,
+    imageAlt: winterPhotos[1].alt,
+    imageCaption: winterPhotos[1].caption,
     related: ["after-ski-hot-food", "chongli-food-guide", "chongli-summer-night-food"],
   },
   {

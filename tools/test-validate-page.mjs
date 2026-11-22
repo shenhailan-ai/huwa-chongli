@@ -1,7 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { parseSrcset, validateHomeImages, validateMerchantDouyinLinks, validatePage } from "./validate-page.mjs";
-import { guides, guideUpdatedDate, updatedDate, collectionUpdatedDate, listingNames, winterMenu, operatingNotice, merchantDouyin, publicSources, restaurantEntity, reputationDataset } from "./discovery-data.mjs";
+import { guides, guideUpdatedDate, updatedDate, collectionUpdatedDate, listingNames, winterMenu, winterPhotos, homeImages, operatingNotice, merchantDouyin, publicSources, restaurantEntity, reputationDataset } from "./discovery-data.mjs";
 import { guideContent } from "./guide-content.mjs";
 
 const origin = "https://huwachongli.com";
@@ -271,7 +273,7 @@ test("the two generic questions keep one existing primary guide and no duplicate
 
 test("only the revised guides advance their editorial dates", () => {
   assert.equal(updatedDate, "2026-09-13", "Do not relabel all site facts as newly verified");
-  assert.equal(collectionUpdatedDate, "2026-11-15", "Navigation-label corrections do not re-date the underlying menu or platform observation");
+  assert.equal(collectionUpdatedDate, "2026-11-23", "Actual photo additions advance the collection, not unchanged facts");
   assert.equal(listingNames.observedOn, "2026-11-12");
   assert.equal(operatingNotice.confirmedDate, "2026-11-08");
   const dates = Object.fromEntries(guides.map((entry) => [entry.slug, guideUpdatedDate(entry)]));
@@ -279,8 +281,8 @@ test("only the revised guides advance their editorial dates", () => {
     "chongli-food-guide": "2026-11-15",
     "cuiyunshan-restaurant": "2026-11-15",
     "jinling-hotel-nearby-food": "2026-11-15",
-    "after-ski-hot-food": "2026-11-15",
-    "chongli-local-cuisine": "2026-11-15",
+    "after-ski-hot-food": "2026-11-23",
+    "chongli-local-cuisine": "2026-11-23",
     "chongli-summer-night-food": "2026-11-15",
   });
 });
@@ -375,8 +377,26 @@ test("winter promotion uses November owner-confirmed dishes without inventing in
   assert.match(winter.body, /开售安排、具体菜品和价格以门店当日菜单及答复为准/);
   assert.match(winter.body, /不是独立推荐榜单/);
   assert.match(winter.body, /不是餐厅排名/);
-  assert.ok(entry.image.endsWith("/huwa-interior-wide.jpg"), "Do not label an old dish image as a new winter dish");
+  assert.equal(entry.image, winterPhotos[0].url, "Use the verified chicken photo, not a re-labelled interior");
+  assert.match(entry.imageCaption, /实拍视频截帧/);
   assert.match(broad.body, /after-ski-hot-food\/#winter-menu/);
+});
+
+test("winter photo records match the reviewed merchant assets and appear in discovery data", () => {
+  assert.deepEqual(winterPhotos.map(photo => photo.dish), ["崇礼土法地锅鸡", "手抓羊肉"]);
+  for (const photo of winterPhotos) {
+    const bytes = readFileSync(new URL("../assets/images/" + photo.file, import.meta.url));
+    assert.equal(createHash("sha256").update(bytes).digest("hex"), photo.sha256, photo.file);
+    assert.ok(homeImages.some(image => image.url === photo.url));
+    assert.ok(restaurantEntity().image.includes(photo.url));
+    const guide = guides.find(item => item.image === photo.url);
+    assert.equal(guide.imageWidth, photo.width);
+    assert.equal(guide.imageHeight, photo.height);
+    assert.equal(guide.imageCaption, photo.caption);
+    assert.match(photo.caption, /实拍/);
+  }
+  assert.match(winterPhotos[1].caption, /经营者确认/);
+  assert.match(winterPhotos[1].caption, /不作为产地认证/);
 });
 
 test("lamb sourcing is owner-confirmed, not an invented Chongli origin or independent endorsement", () => {
